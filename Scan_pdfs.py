@@ -101,6 +101,14 @@ for nombre, hojas in strings.items():
                   f.write(hoja)
 
 
+# In[250]:
+
+
+for lista in strings.values():
+    for string in lista:
+        print(regex.findall(r"\d\d.\d\d.\d\d\d\d", string))
+
+
 # In[205]:
 
 
@@ -109,12 +117,12 @@ print(_file)
 #print(strings[_file][0])
 
 
-# In[237]:
+# In[245]:
 
 
-_file = archivos[2]
+_file = archivos[1]
 print(_file)
-foo = strings[_file][0]
+foo = strings[_file][1]
 # Split by line breaks :
 foo_lines = foo.split("\n")
 # Select valid lines (i.e. lionge than 5 characters) :
@@ -128,22 +136,24 @@ for i in regex.finditer(r"^[A-Z]*", foo_lines[14]):
     print(i)
 
 
-# In[238]:
+# In[246]:
 
 
 #print(foo)
 
 
-# In[239]:
+# In[247]:
 
 
 # My regexps :
 
 may_ge_2 = r"^[A-Z]{2,}"  # Find CAPITAL WORDS longer than 2, at the begining of the line.
 numbers = r"(\d+\.\d+|\d+)" # Find numbers of any length, with a decimal point or not.
+from_begining_until_point = r"^.+?(?=(\..+))" # Find any text before the first occurrence of a pint
+failed_extract_units = r"(?<=((\d+\.\d+|\d+)+))(.+)"
 
 
-# In[240]:
+# In[261]:
 
 
 for line in foo_lines[14:]:
@@ -151,7 +161,16 @@ for line in foo_lines[14:]:
         print(i.string)
         print('\t',i.group())
         for j in regex.finditer(r"(\d+\.\d+|\d+)", i.string): # find groups of numbers
-            print('\t\t',j.group())
+            print(2*'\t',j.group())
+            # (?<=\[).+?(?=\])
+        for k in regex.finditer(r"(?<=(\d+\.\d+|\d+)).+?(?=(\d+\.\d+|\d+))", i.string):
+            print(3*'\t',k.group())
+
+
+# In[ ]:
+
+
+
 
 
 # In[221]:
