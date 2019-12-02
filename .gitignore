@@ -3,5 +3,4 @@
 .DS_Store
 textos/*
 imagenes/*
-analisis_clinicos/*
 __pycache__/
