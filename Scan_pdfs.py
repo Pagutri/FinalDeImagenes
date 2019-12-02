@@ -90,49 +90,75 @@ strings = {
 }
 
 
-# In[107]:
+# In[215]:
 
 
 # Sent all of these files to texts/
 for nombre, hojas in strings.items():
     for i, hoja in enumerate(hojas):
-        with open(f"{nombre.replace('.pdf', '')}.{i}.txt", "w") as f:
+        _file_name = f"{nombre.replace('.pdf', '')}.{i}.txt"
+        with open(_file_name, "w") as f:
                   f.write(hoja)
 
 
-# In[170]:
+# In[205]:
 
 
-foo = strings[archivos[1]][0]
+_file = archivos[1]
+print(_file)
+#print(strings[_file][0])
+
+
+# In[237]:
+
+
+_file = archivos[2]
+print(_file)
+foo = strings[_file][0]
 # Split by line breaks :
 foo_lines = foo.split("\n")
 # Select valid lines (i.e. lionge than 5 characters) :
-foo_lines = [ line for line in foo_lines if len(line) > 1 ]
+foo_lines = [ line for line in foo_lines ] # if len(line) > 1 ]
 
 #regex.compile(r'[A-Z]')
 print(foo_lines[10])
 for i in regex.finditer(r"^[A-Z]*", foo_lines[14]):
     print(foo_lines[14])
-    print(dir(i))
+    #print(dir(i))
     print(i)
 
 
-# In[185]:
+# In[238]:
+
+
+#print(foo)
+
+
+# In[239]:
+
+
+# My regexps :
+
+may_ge_2 = r"^[A-Z]{2,}"  # Find CAPITAL WORDS longer than 2, at the begining of the line.
+numbers = r"(\d+\.\d+|\d+)" # Find numbers of any length, with a decimal point or not.
+
+
+# In[240]:
 
 
 for line in foo_lines[14:]:
-    for i in regex.finditer(r"^[A-Z]+", line): # FIND lines starting with Caps 
+    for i in regex.finditer(r"^.+?(?=(\..+))", line): # FIND lines starting with Caps 
         print(i.string)
         print('\t',i.group())
-        for j in regex.finditer(r"\d+\.\d+", i.string):
+        for j in regex.finditer(r"(\d+\.\d+|\d+)", i.string): # find groups of numbers
             print('\t\t',j.group())
 
 
-# In[172]:
+# In[221]:
 
 
 for line in foo_lines:
-    for i in regex.findall(r"^[A-Z]+", line):
+    for i in regex.findall(r"^[A-Z]{2,}", line):
         print(i)
 
 
