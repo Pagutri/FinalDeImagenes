@@ -109,7 +109,7 @@ for lista in strings.values():
         print(regex.findall(r"\d\d.\d\d.\d\d\d\d", string))
 
 
-# In[205]:
+# In[304]:
 
 
 _file = archivos[1]
@@ -117,12 +117,12 @@ print(_file)
 #print(strings[_file][0])
 
 
-# In[245]:
+# In[305]:
 
 
 _file = archivos[1]
 print(_file)
-foo = strings[_file][1]
+foo = strings[_file][0]
 # Split by line breaks :
 foo_lines = foo.split("\n")
 # Select valid lines (i.e. lionge than 5 characters) :
@@ -130,40 +130,46 @@ foo_lines = [ line for line in foo_lines ] # if len(line) > 1 ]
 
 #regex.compile(r'[A-Z]')
 print(foo_lines[10])
-for i in regex.finditer(r"^[A-Z]*", foo_lines[14]):
+print(foo_lines[14])
+for i in regex.finditer(r"[ce]{2,}", foo):
     print(foo_lines[14])
     #print(dir(i))
     print(i)
 
 
-# In[246]:
+# In[298]:
 
 
 #print(foo)
 
 
-# In[247]:
+# In[299]:
 
 
 # My regexps :
 
-may_ge_2 = r"^[A-Z]{2,}"  # Find CAPITAL WORDS longer than 2, at the begining of the line.
-numbers = r"(\d+\.\d+|\d+)" # Find numbers of any length, with a decimal point or not.
-from_begining_until_point = r"^.+?(?=(\..+))" # Find any text before the first occurrence of a pint
-failed_extract_units = r"(?<=((\d+\.\d+|\d+)+))(.+)"
+my_may_ge_2 = r"^[A-Z]{2,}"  # Find CAPITAL WORDS longer than 2, at the begining of the line.
+my_numbers = r"(\d+\.\d+|\d+)" # Find numbers of any length, with a decimal point or not.
+my_from_begining_until_point = r"^.+?(?=(\..+))" # Find any text before the first occurrence of a pint
+my_caps_and_whitespace_until_point = r"^[A-Z\s]+?(?=(\..+))"
+my_failed_extract_units = r"(?<=((\d+\.\d+|\d+)+))(.+)"
+googled_text_between_brackets = r"(?<=\[).+?(?=\])"
+my_extract_units = r"(?<=(\d+\.\d+|\d+))\D+?(?=(\d+\.\d+|\d+))"
+my_better_extract_units_between_numbers = r"(?<=(\d+\.\d+|\d+))\D[^\.\d]+?(?=(\d+\.\d+|\d+))"
+my_extract_units_between_numbers_and_whitespace = r"(?<=(\d+\.\d+|\d+))\D[^\.\d]+?(?=\s)"
 
 
-# In[261]:
+# In[306]:
 
 
-for line in foo_lines[14:]:
-    for i in regex.finditer(r"^.+?(?=(\..+))", line): # FIND lines starting with Caps 
+for line in foo_lines:
+    for i in regex.finditer(r"^[A-Z\s]+?(?=(\..+))", line): # FIND lines starting with Caps 
         print(i.string)
         print('\t',i.group())
         for j in regex.finditer(r"(\d+\.\d+|\d+)", i.string): # find groups of numbers
             print(2*'\t',j.group())
             # (?<=\[).+?(?=\])
-        for k in regex.finditer(r"(?<=(\d+\.\d+|\d+)).+?(?=(\d+\.\d+|\d+))", i.string):
+        for k in regex.finditer(r"(?<=(\d+\.\d+|\d+))\D[^\d]+?(?=\s)", i.string):
             print(3*'\t',k.group())
 
 
