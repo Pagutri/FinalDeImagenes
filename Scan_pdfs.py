@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[122]:
+# In[1]:
 
 
 import os
@@ -30,7 +30,7 @@ import cv2 as cv
 import pytesseract
 
 
-# In[65]:
+# In[2]:
 
 
 import timing
@@ -38,7 +38,7 @@ importlib.reload(timing)
 import timing
 
 
-# In[66]:
+# In[3]:
 
 
 @timing.time_log()
@@ -51,29 +51,50 @@ def images_to_strings(x):
     }
 
 
-# In[67]:
+# In[4]:
 
 
 path = os.path.abspath('analisis_clinicos/')
 path
 
 
-# In[83]:
+# In[5]:
 
 
 path_textos = os.path.abspath('textos')
 path_textos
 
 
-# In[107]:
+# In[13]:
 
 
 caminos_textos = glob.glob(f"{path_textos}/*.txt")
 caminos_textos.sort()
-caminos_textos
+#caminos_textos
 
 
-# In[112]:
+# In[14]:
+
+
+caminos = glob.glob(f"{path}/*.pdf")
+#caminos
+
+
+# In[15]:
+
+
+archivos = [ os.path.split(camino)[1] for camino in caminos]
+archivos
+
+
+# In[17]:
+
+
+nombres = [ archivo.replace('.pdf', '') for archivo in archivos ]
+nombres
+
+
+# In[18]:
 
 
 ahora_si = { 
@@ -82,37 +103,34 @@ ahora_si = {
 }
 
 
-# In[117]:
+# In[23]:
 
 
 [ ahora_si[key].sort() for key in ahora_si.keys() ]
+#ahora_si
 
 
-# In[121]:
+# In[24]:
 
 
-ahora_si
+Pats = True
+
+if Pats:
+    strings = {}
+    for key in ahora_si.keys():
+        _strings = []
+        for _file in ahora_si[key]:
+            with open(_file, 'r') as f:
+              _strings.append(f.read())
+        strings.update({
+            key: _strings
+        })
 
 
-# In[68]:
+# In[30]:
 
 
-caminos = glob.glob(f"{path}/*.pdf")
-caminos
-
-
-# In[69]:
-
-
-archivos = [ os.path.split(camino)[1] for camino in caminos]
-archivos
-
-
-# In[105]:
-
-
-nombres = [ archivo.replace('.pdf', '') for archivo in archivos ]
-nombres
+#print(strings[archivos[1]][1])
 
 
 # In[70]:
