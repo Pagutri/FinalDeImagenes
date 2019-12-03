@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[10]:
+# In[64]:
 
 
 import os
@@ -29,7 +29,7 @@ import cv2 as cv
 import pytesseract
 
 
-# In[11]:
+# In[65]:
 
 
 import timing
@@ -37,7 +37,7 @@ importlib.reload(timing)
 import timing
 
 
-# In[13]:
+# In[66]:
 
 
 @timing.time_log()
@@ -50,47 +50,47 @@ def images_to_strings(x):
     }
 
 
-# In[2]:
+# In[67]:
 
 
 path = os.path.abspath('analisis_clinicos/')
 path
 
 
-# In[3]:
+# In[68]:
 
 
 caminos = glob.glob(f"{path}/*.pdf")
 caminos
 
 
-# In[4]:
+# In[69]:
 
 
 archivos = [ os.path.split(camino)[1] for camino in caminos]
 archivos
 
 
-# In[5]:
+# In[70]:
 
 
 #pool.close()
 #pool.terminate()
 
 
-# In[6]:
+# In[71]:
 
 
 pool = mp.Pool()
 
 
-# In[7]:
+# In[72]:
 
 
 imagenes = pool.map(convert_from_path, caminos)
 
 
-# In[8]:
+# In[73]:
 
 
 archivos_en_imagenes = {
@@ -98,62 +98,71 @@ archivos_en_imagenes = {
 }
 
 
-# In[9]:
+# In[74]:
 
 
 archivos_en_imagenes[archivos[0]]
 
 
-# In[64]:
+# In[77]:
 
 
-strings = {
+strings2 = {
     nombre: pool.map(pytesseract.image_to_string, archivo) for nombre, archivo in archivos_en_imagenes.items()
 }
 
 
-# In[14]:
+# In[76]:
 
 
 strings = images_to_strings(archivos_en_imagenes)
 
 
-# In[15]:
+# In[79]:
 
 
-# Sent all of these files to texts/
+path_textos = os.path.abspath('textos')
+path_textos
+
+
+# In[81]:
+
+
+# Send all of these files to texts/
+
 for nombre, hojas in strings.items():
     for i, hoja in enumerate(hojas):
-        _file_name = f"{nombre.replace('.pdf', '')}.{i}.txt"
+        _file_name = os.path.join(path_textos, f"{nombre.replace('.pdf', '')}.{i}.txt")
         with open(_file_name, "w") as f:
                   f.write(hoja)
 
 
-# In[16]:
+# In[82]:
 
 
 for lista in strings.values():
     for string in lista:
-        print(regex.findall(r"\d\d.\d\d.\d\d\d\d", string))
+        print(regex.findall(r"\d{2}/\d{2}/\d{4}", string))
 
 
-# In[43]:
-
-
-_file = archivos[1]
-#print(_file)
-print(strings[_file][0])
-
-
-# In[48]:
+# In[54]:
 
 
 _file = archivos[3]
 print(_file)
-foo = strings[_file][0]
+print(len(strings[_file]))
+#print(strings[_file][0])
+
+
+# In[58]:
+
+
+foo = strings[_file][1]
+
 # Split by line breaks :
 foo_lines = foo.split("\n")
-# Select valid lines (i.e. lionge than 5 characters) :
+
+# Select valid lines (i.e. longer than 5 characters) :
 foo_lines = [ line for line in foo_lines ] # if len(line) > 1 ]
 
 #regex.compile(r'[A-Z]')
@@ -168,13 +177,30 @@ for line in foo_lines:
 """
 
 
-# In[19]:
+# In[59]:
 
 
 #print(foo)
 
 
-# In[44]:
+# In[63]:
+
+
+for line in foo_lines:
+    for i in regex.finditer(r"^([A-Z\s|[A-Z]\.?)+?(?=(\..+))", line): # FIND lines starting with Caps 
+        print(i.string)
+        print('\t',i.group())
+        for j in regex.finditer(r"(\d+\.\d+|\d+)", i.string): # find groups of numbers
+            print(2*'\t',j.group())
+            # (?<=\[).+?(?=\])
+        for k in regex.finditer(r"(?<=(\d+\.\d+|\d+))\D[^\d]+?(?=\s)", i.string):
+            print(3*'\t',k.group())
+        for l in regex.finditer(r"()[\d]", i.string):
+            print(4*"\t", l.group())
+    #for i in regex.finditer(r"^[A-Z\s]+?(?=(\..+))", line): 
+
+
+# In[43]:
 
 
 # My regexps :
@@ -189,21 +215,6 @@ googled_text_between_brackets = r"(?<=\[).+?(?=\])"
 my_extract_units = r"(?<=(\d+\.\d+|\d+))\D+?(?=(\d+\.\d+|\d+))"
 my_better_extract_units_between_numbers = r"(?<=(\d+\.\d+|\d+))\D[^\.\d]+?(?=(\d+\.\d+|\d+))"
 my_extract_units_between_numbers_and_whitespace = r"(?<=(\d+\.\d+|\d+))\D[^\.\d]+?(?=\s)"
-
-
-# In[41]:
-
-
-for line in foo_lines:
-    for i in regex.finditer(r"^([A-Z\s|[A-Z]\.?)+?(?=(\..+))", line): # FIND lines starting with Caps 
-        print(i.string)
-        print('\t',i.group())
-        for j in regex.finditer(r"(\d+\.\d+|\d+)", i.string): # find groups of numbers
-            print(2*'\t',j.group())
-            # (?<=\[).+?(?=\])
-        for k in regex.finditer(r"(?<=(\d+\.\d+|\d+))\D[^\d]+?(?=\s)", i.string):
-            print(3*'\t',k.group())
-    #for i in regex.finditer(r"^[A-Z\s]+?(?=(\..+))", line): 
 
 
 # In[35]:
