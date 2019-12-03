@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[64]:
+# In[122]:
 
 
 import os
@@ -9,6 +9,7 @@ import regex
 import glob
 import multiprocessing as mp
 import importlib
+#import pprint
 
 from functools import partial, reduce
 
@@ -57,6 +58,42 @@ path = os.path.abspath('analisis_clinicos/')
 path
 
 
+# In[83]:
+
+
+path_textos = os.path.abspath('textos')
+path_textos
+
+
+# In[107]:
+
+
+caminos_textos = glob.glob(f"{path_textos}/*.txt")
+caminos_textos.sort()
+caminos_textos
+
+
+# In[112]:
+
+
+ahora_si = { 
+    archivo: glob.glob(os.path.join(path_textos ,f"{nombre}.?.txt")) 
+    for archivo, nombre in zip(archivos, nombres)
+}
+
+
+# In[117]:
+
+
+[ ahora_si[key].sort() for key in ahora_si.keys() ]
+
+
+# In[121]:
+
+
+ahora_si
+
+
 # In[68]:
 
 
@@ -69,6 +106,13 @@ caminos
 
 archivos = [ os.path.split(camino)[1] for camino in caminos]
 archivos
+
+
+# In[105]:
+
+
+nombres = [ archivo.replace('.pdf', '') for archivo in archivos ]
+nombres
 
 
 # In[70]:
@@ -118,14 +162,13 @@ strings2 = {
 strings = images_to_strings(archivos_en_imagenes)
 
 
-# In[79]:
+# In[ ]:
 
 
-path_textos = os.path.abspath('textos')
-path_textos
 
 
-# In[81]:
+
+# In[106]:
 
 
 # Send all of these files to texts/
@@ -137,6 +180,12 @@ for nombre, hojas in strings.items():
                   f.write(hoja)
 
 
+# In[ ]:
+
+
+
+
+
 # In[82]:
 
 
@@ -145,19 +194,19 @@ for lista in strings.values():
         print(regex.findall(r"\d{2}/\d{2}/\d{4}", string))
 
 
-# In[54]:
+# In[124]:
 
 
-_file = archivos[3]
+_file = archivos[1]
 print(_file)
 print(len(strings[_file]))
-#print(strings[_file][0])
+print(strings[_file][2])
 
 
-# In[58]:
+# In[101]:
 
 
-foo = strings[_file][1]
+foo = strings[_file][2]
 
 # Split by line breaks :
 foo_lines = foo.split("\n")
@@ -177,27 +226,41 @@ for line in foo_lines:
 """
 
 
-# In[59]:
+# In[102]:
 
 
 #print(foo)
 
 
-# In[63]:
+# In[103]:
 
 
 for line in foo_lines:
-    for i in regex.finditer(r"^([A-Z\s|[A-Z]\.?)+?(?=(\..+))", line): # FIND lines starting with Caps 
+    for i in regex.finditer(r"^([A-Z\s]|[A-Z]\.?)+?(?=(\..+))", line): # FIND lines starting with Caps 
         print(i.string)
         print('\t',i.group())
         for j in regex.finditer(r"(\d+\.\d+|\d+)", i.string): # find groups of numbers
             print(2*'\t',j.group())
-            # (?<=\[).+?(?=\])
         for k in regex.finditer(r"(?<=(\d+\.\d+|\d+))\D[^\d]+?(?=\s)", i.string):
             print(3*'\t',k.group())
-        for l in regex.finditer(r"()[\d]", i.string):
-            print(4*"\t", l.group())
+        #for l in regex.finditer(r"()[\d]", i.string):
+            #print(4*"\t", l.group())
     #for i in regex.finditer(r"^[A-Z\s]+?(?=(\..+))", line): 
+
+
+# In[ ]:
+
+
+"""
+for line in foo_lines:
+    for i in regex.finditer(r"^([A-Z\s]|[A-Z]\.?)+?(?=(\..+))", line): # FIND lines starting with Caps 
+        print(i.string)
+        print('\t',i.group())
+        for j in regex.finditer(r"(\d+\.\d+|\d+)", i.string): # find groups of numbers
+            print(2*'\t',j.group())
+        for k in regex.finditer(r"(?<=(\d+\.\d+|\d+))\D[^\d]+?(?=\s)", i.string):
+            print(3*'\t',k.group())
+"""
 
 
 # In[43]:
