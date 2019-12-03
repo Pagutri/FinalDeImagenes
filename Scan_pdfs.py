@@ -145,10 +145,10 @@ _file = archivos[1]
 print(strings[_file][0])
 
 
-# In[33]:
+# In[48]:
 
 
-_file = archivos[1]
+_file = archivos[3]
 print(_file)
 foo = strings[_file][0]
 # Split by line breaks :
@@ -159,11 +159,13 @@ foo_lines = [ line for line in foo_lines ] # if len(line) > 1 ]
 #regex.compile(r'[A-Z]')
 print(foo_lines[10])
 print(foo_lines[14])
+"""
 for line in foo_lines:
-    for i in regex.finditer(r"[0ce]{2,}", line):
-        #print(foo_lines[14])
-        print(i.string)
-        print('\t', i.group())
+    for i in regex.finditer(r"[0a-z]{2,}", line):
+        print(foo_lines[14])
+        #print(i.string)
+        #print('\t', i.group())
+"""
 
 
 # In[19]:
@@ -172,7 +174,7 @@ for line in foo_lines:
 #print(foo)
 
 
-# In[20]:
+# In[44]:
 
 
 # My regexps :
@@ -181,6 +183,7 @@ my_may_ge_2 = r"^[A-Z]{2,}"  # Find CAPITAL WORDS longer than 2, at the begining
 my_numbers = r"(\d+\.\d+|\d+)" # Find numbers of any length, with a decimal point or not.
 my_from_begining_until_point = r"^.+?(?=(\..+))" # Find any text before the first occurrence of a pint
 my_caps_and_whitespace_until_point = r"^[A-Z\s]+?(?=(\..+))"
+my_caps_and_whitspace_or_acronym_until_point = r"^([A-Z\s|[A-Z]\.?)+?(?=(\..+))"
 my_failed_extract_units = r"(?<=((\d+\.\d+|\d+)+))(.+)"
 googled_text_between_brackets = r"(?<=\[).+?(?=\])"
 my_extract_units = r"(?<=(\d+\.\d+|\d+))\D+?(?=(\d+\.\d+|\d+))"
