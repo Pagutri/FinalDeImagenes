@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[104]:
+# In[10]:
 
 
 import os
 import regex
 import glob
 import multiprocessing as mp
+import importlib
 
 from functools import partial, reduce
 
@@ -28,47 +29,68 @@ import cv2 as cv
 import pytesseract
 
 
-# In[42]:
+# In[11]:
+
+
+import timing
+importlib.reload(timing)
+import timing
+
+
+# In[13]:
+
+
+@timing.time_log()
+def images_to_strings(x):
+    """
+    """
+    
+    return {
+        nombre: pool.map(pytesseract.image_to_string, archivo) for nombre, archivo in x.items()
+    }
+
+
+# In[2]:
 
 
 path = os.path.abspath('analisis_clinicos/')
 path
 
 
-# In[50]:
+# In[3]:
 
 
 caminos = glob.glob(f"{path}/*.pdf")
 caminos
 
 
-# In[53]:
+# In[4]:
 
 
 archivos = [ os.path.split(camino)[1] for camino in caminos]
 archivos
 
 
-# In[ ]:
+# In[5]:
 
 
 #pool.close()
 #pool.terminate()
 
 
-# In[45]:
+# In[6]:
 
 
 pool = mp.Pool()
 
 
-# In[56]:
+# In[7]:
 
 
 imagenes = pool.map(convert_from_path, caminos)
 
 
-# In[57]:
+# In[8]:
 
 
 archivos_en_imagenes = {
@@ -76,7 +98,7 @@ archivos_en_imagenes = {
 }
 
 
-# In[65]:
+# In[9]:
 
 
 archivos_en_imagenes[archivos[0]]
@@ -90,7 +112,13 @@ strings = {
 }
 
 
-# In[215]:
+# In[14]:
+
+
+strings = images_to_strings(archivos_en_imagenes)
+
+
+# In[15]:
 
 
 # Sent all of these files to texts/
@@ -101,7 +129,7 @@ for nombre, hojas in strings.items():
                   f.write(hoja)
 
 
-# In[250]:
+# In[16]:
 
 
 for lista in strings.values():
@@ -109,15 +137,15 @@ for lista in strings.values():
         print(regex.findall(r"\d\d.\d\d.\d\d\d\d", string))
 
 
-# In[304]:
+# In[43]:
 
 
 _file = archivos[1]
-print(_file)
-#print(strings[_file][0])
+#print(_file)
+print(strings[_file][0])
 
 
-# In[305]:
+# In[33]:
 
 
 _file = archivos[1]
@@ -131,19 +159,20 @@ foo_lines = [ line for line in foo_lines ] # if len(line) > 1 ]
 #regex.compile(r'[A-Z]')
 print(foo_lines[10])
 print(foo_lines[14])
-for i in regex.finditer(r"[ce]{2,}", foo):
-    print(foo_lines[14])
-    #print(dir(i))
-    print(i)
+for line in foo_lines:
+    for i in regex.finditer(r"[0ce]{2,}", line):
+        #print(foo_lines[14])
+        print(i.string)
+        print('\t', i.group())
 
 
-# In[298]:
+# In[19]:
 
 
 #print(foo)
 
 
-# In[299]:
+# In[20]:
 
 
 # My regexps :
@@ -159,11 +188,11 @@ my_better_extract_units_between_numbers = r"(?<=(\d+\.\d+|\d+))\D[^\.\d]+?(?=(\d
 my_extract_units_between_numbers_and_whitespace = r"(?<=(\d+\.\d+|\d+))\D[^\.\d]+?(?=\s)"
 
 
-# In[306]:
+# In[41]:
 
 
 for line in foo_lines:
-    for i in regex.finditer(r"^[A-Z\s]+?(?=(\..+))", line): # FIND lines starting with Caps 
+    for i in regex.finditer(r"^([A-Z\s|[A-Z]\.?)+?(?=(\..+))", line): # FIND lines starting with Caps 
         print(i.string)
         print('\t',i.group())
         for j in regex.finditer(r"(\d+\.\d+|\d+)", i.string): # find groups of numbers
@@ -171,12 +200,14 @@ for line in foo_lines:
             # (?<=\[).+?(?=\])
         for k in regex.finditer(r"(?<=(\d+\.\d+|\d+))\D[^\d]+?(?=\s)", i.string):
             print(3*'\t',k.group())
+    #for i in regex.finditer(r"^[A-Z\s]+?(?=(\..+))", line): 
 
 
-# In[ ]:
+# In[35]:
 
 
-
+dir(regex)
+help(regex.purge)
 
 
 # In[221]:
