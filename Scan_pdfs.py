@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[37]:
+# In[73]:
 
 
 import os
@@ -9,7 +9,7 @@ import regex
 import glob
 import multiprocessing as mp
 import importlib
-#import pprint
+import pprint
 
 from typing import Tuple, Callable, Any, NoReturn, List, Dict
 
@@ -264,12 +264,47 @@ for lista in strings.values():
         print(regex.findall(r"\d{2}/\d{2}/\d{4}", string))
 
 
-# In[63]:
+# In[74]:
 
 
-for lista in strings.values():
+dates = {}
+for nombre, lista in strings.items():
+    _tmp_list = []
     for string in lista:
-        print(regex.findall(r"(\d{2}\D[A-Z]{3}\D\d{4}|\d{2}\D\d{2}\D\d{4})", string))
+        _tmp_val = set(regex.findall(r"(\d{2}\D[A-Z]{3}\D\d{4}|\d{2}\D\d{2}\D\d{4})", string))
+        if len(_tmp_list) == 0:
+            _tmp_list.append(_tmp_val)
+        else:
+            if _tmp_val
+    dates.update({
+        nombre: _tmp_list
+    })
+pprint.pprint(dates)
+
+
+# In[79]:
+
+
+s = set([1, 2, 3, 3])
+
+
+# In[86]:
+
+
+s.discard(1)
+len(s)
+
+
+# In[85]:
+
+
+len(s.difference(s))
+
+
+# In[83]:
+
+
+dif.
 
 
 # In[52]:
