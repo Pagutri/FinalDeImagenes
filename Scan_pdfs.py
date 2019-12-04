@@ -264,6 +264,20 @@ for lista in strings.values():
         print(regex.findall(r"\d{2}/\d{2}/\d{4}", string))
 
 
+# In[63]:
+
+
+for lista in strings.values():
+    for string in lista:
+        print(regex.findall(r"(\d{2}\D[A-Z]{3}\D\d{4}|\d{2}\D\d{2}\D\d{4})", string))
+
+
+# In[52]:
+
+
+nombres
+
+
 # In[15]:
 
 
