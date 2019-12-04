@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[29]:
 
 
 import os
@@ -10,6 +10,8 @@ import glob
 import multiprocessing as mp
 import importlib
 #import pprint
+
+from typing import Tuple, Callable, Any, NoReturn, List
 
 from functools import partial, reduce
 
@@ -38,7 +40,7 @@ importlib.reload(timing)
 import timing
 
 
-# In[3]:
+# In[31]:
 
 
 @timing.time_log()
@@ -49,6 +51,33 @@ def images_to_strings(x):
     return {
         nombre: pool.map(pytesseract.image_to_string, archivo) for nombre, archivo in x.items()
     }
+##
+
+
+def tab_by_regex(x: str) -> str:
+    """
+    """
+    
+    newline = lambda x: f"{x}\n"
+    ntab    = lambda n, txt: n*"\t" + txt
+    
+    _x_lines: List[str] = x.split('\n')
+    _my_str:  str       = ''
+        
+    for line in _x_lines:
+        # Match lines starting with Caps, separated by spaces or points : 
+        for i in regex.finditer(r"^([A-Z\s]|[A-Z]\.?)+?(?=(\..+))", line): 
+            _my_str += newline(i.string)
+            _my_str += newline(ntab(1, i.group()))
+            # Match numbers, which could be either integers or floats : 
+            for j in regex.finditer(r"(\d+\.\d+|\d+)", i.string): # find groups of numbers
+                _my_str += newline(ntab(2, j.group()))
+            # Match strings found between numbers :
+            for k in regex.finditer(r"(?<=(\d+\.\d+|\d+))\D[^\d]+?(?=\s)", i.string):
+                _my_str += newline(ntab(3, k.group()))
+    
+    return _my_str
+##
 
 
 # In[4]:
@@ -127,7 +156,7 @@ if Pats:
         })
 
 
-# In[17]:
+# In[13]:
 
 
 Gus = True
@@ -204,7 +233,7 @@ if save:
                 f.write(hoja)
 
 
-# In[26]:
+# In[14]:
 
 
 for lista in strings.values():
@@ -212,7 +241,7 @@ for lista in strings.values():
         print(regex.findall(r"\d{2}/\d{2}/\d{4}", string))
 
 
-# In[27]:
+# In[15]:
 
 
 _file = archivos[1]
@@ -221,7 +250,7 @@ print(len(strings[_file]))
 print(strings[_file][2])
 
 
-# In[28]:
+# In[17]:
 
 
 foo = strings[_file][2]
@@ -250,20 +279,37 @@ for line in foo_lines:
 #print(foo)
 
 
-# In[30]:
+# In[44]:
 
 
+print(tab_by_regex(strings[archivos[1]][3]))
+
+
+# In[19]:
+
+
+newline = lambda x: f"{x}\n"
+ntab = lambda n, txt: n*"\t" + txt
+
+
+# In[27]:
+
+
+_my_str = ''
 for line in foo_lines:
     for i in regex.finditer(r"^([A-Z\s]|[A-Z]\.?)+?(?=(\..+))", line): # FIND lines starting with Caps 
-        print(i.string)
-        print('\t',i.group())
+        _my_str += newline(i.string)
+        _my_str += newline(ntab(1, i.group()))
         for j in regex.finditer(r"(\d+\.\d+|\d+)", i.string): # find groups of numbers
-            print(2*'\t',j.group())
+            _my_str += newline(ntab(2, j.group()))
         for k in regex.finditer(r"(?<=(\d+\.\d+|\d+))\D[^\d]+?(?=\s)", i.string):
-            print(3*'\t',k.group())
-        #for l in regex.finditer(r"()[\d]", i.string):
-            #print(4*"\t", l.group())
-    #for i in regex.finditer(r"^[A-Z\s]+?(?=(\..+))", line): 
+            _my_str += newline(ntab(3, k.group()))
+
+
+# In[28]:
+
+
+print(_my_str)
 
 
 # In[31]:
