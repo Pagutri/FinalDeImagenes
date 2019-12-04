@@ -1,0 +1,41 @@
+DIR. (477) 719-71-02 CONM. 719-71-00 EXT. 143 Y 145 TEL/FAX: 713-33-03
+	DIR
+		477
+		719
+		71
+		02
+		719
+		71
+		00
+		143
+		145
+		713
+		33
+		03
+			 CONM.
+			 EXT.
+			 Y
+			 TEL/FAX:
+GLUCOSA..... eects 139 mg/dL 60 - 100
+	GLUCOSA
+		139
+		60
+		100
+			 mg/dL
+			 -
+ACIDO URICO.Q..0.. eee cette 48 mg/dL 4.80 - 8.70
+	ACIDO URICO
+		0
+		48
+		4.80
+		8.70
+			..
+			 mg/dL
+			 -
+HEMOGLOBINA GLICOSILADA.......... 7.2 % 3.80 - 6.40
+	HEMOGLOBINA GLICOSILADA
+		7.2
+		3.80
+		6.40
+			 %
+			 -

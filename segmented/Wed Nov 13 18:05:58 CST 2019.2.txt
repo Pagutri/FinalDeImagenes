@@ -1,0 +1,59 @@
+DIR. (477) 719-71-02 CONM. 719-71-00 EXT. 143 Y 145 TEL/FAX: 713-33-03
+	DIR
+		477
+		719
+		71
+		02
+		719
+		71
+		00
+		143
+		145
+		713
+		33
+		03
+			 CONM.
+			 EXT.
+			 Y
+			 TEL/FAX:
+COLESTEROL.vesssssssssssssesssssesesssseensee 152 mg/dL ome eae
+	COLESTEROL
+		152
+			 mg/dL
+VLDL COLESTEROL.....:scccssssssssecsssees 7 mg/dL 5-35
+	VLDL COLESTEROL
+		7
+		5
+		35
+			 mg/dL
+LDL COLESTEROL.. 91 mg/dL. 130-159 Limite Ato
+	LDL COLESTEROL
+		91
+		130
+		159
+			 mg/dL.
+			 Limite
+BAJO... MAYOR A 55
+	BAJO
+		55
+HDL COLESTEROL........cscccssscesssesesses 56 mg/dL INTERMEDIO... 35-55
+	HDL COLESTEROL
+		56
+		35
+		55
+			 mg/dL
+ALTO... MENOR A 35
+	ALTO
+		35
+LIPIDOS TOTALES.....cccsccssssesssseeessseees 362 mg/dL 450 - 1000
+	LIPIDOS TOTALES
+		362
+		450
+		1000
+			 mg/dL
+			 -
+INDICE ATEROGENICO.........ccsss000000s 27 RESO INT oRME
+	INDICE ATEROGENICO
+		000000
+		27
+			 RESO
