@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[29]:
+# In[37]:
 
 
 import os
@@ -11,7 +11,7 @@ import multiprocessing as mp
 import importlib
 #import pprint
 
-from typing import Tuple, Callable, Any, NoReturn, List
+from typing import Tuple, Callable, Any, NoReturn, List, Dict
 
 from functools import partial, reduce
 
@@ -40,7 +40,7 @@ importlib.reload(timing)
 import timing
 
 
-# In[31]:
+# In[47]:
 
 
 @timing.time_log()
@@ -53,7 +53,7 @@ def images_to_strings(x):
     }
 ##
 
-
+@timing.time_log()
 def tab_by_regex(x: str) -> str:
     """
     """
@@ -77,6 +77,29 @@ def tab_by_regex(x: str) -> str:
                 _my_str += newline(ntab(3, k.group()))
     
     return _my_str
+##
+
+@timing.time_log()
+def save_results(x: Dict[str, List[str]]):
+    """
+        
+    """
+    
+    try:
+        if 'segmented' not in os.listdir('.'):
+            os.mkdir('segmented')
+        
+        _camino_resultados = os.path.abspath('segmented')
+        _archivos =  list(x.keys())
+    
+        for i, archivo in enumerate(_archivos):
+            for j, page in enumerate(x[archivo]):
+                with open(os.path.join(_camino_resultados, f"{_archivos[i].replace('.pdf', '')}.{j+1}.txt"), 'w') as f:
+                    f.write(tab_by_regex(page))
+    
+        return True
+    except:
+        return False
 ##
 
 
@@ -109,7 +132,7 @@ caminos = glob.glob(f"{path}/*.pdf")
 #caminos
 
 
-# In[8]:
+# In[19]:
 
 
 archivos = [ os.path.split(camino)[1] for camino in caminos]
@@ -219,11 +242,11 @@ archivos_en_imagenes = {
 strings = images_to_strings(archivos_en_imagenes)
 
 
-# In[26]:
+# In[13]:
 
 
 # Send all of these files to texts/
-save = True
+save = False
 
 if save:
     for nombre, hojas in strings.items():
@@ -279,10 +302,50 @@ for line in foo_lines:
 #print(foo)
 
 
-# In[44]:
+# In[27]:
 
 
-print(tab_by_regex(strings[archivos[1]][3]))
+#print(tab_by_regex(strings[archivos[2]][0]))
+
+
+# In[30]:
+
+
+nombres
+
+
+# In[28]:
+
+
+archivos
+
+
+# In[29]:
+
+
+camino_resultados = os.path.abspath('segmented')
+camino_resultados
+
+
+# In[48]:
+
+
+save_results(strings)
+
+
+# In[38]:
+
+
+os.mkdir('hue')
+
+
+# In[34]:
+
+
+for i, archivo in enumerate(archivos):
+    for j, page in enumerate(strings[archivo]):
+        with open(os.path.join(camino_resultados, f"{nombres[i]}.{j+1}.txt"), 'w') as f:
+            f.write(tab_by_regex(page))
 
 
 # In[19]:
