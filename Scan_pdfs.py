@@ -65,7 +65,7 @@ path_textos = os.path.abspath('textos')
 path_textos
 
 
-# In[13]:
+# In[6]:
 
 
 caminos_textos = glob.glob(f"{path_textos}/*.txt")
@@ -73,28 +73,28 @@ caminos_textos.sort()
 #caminos_textos
 
 
-# In[14]:
+# In[7]:
 
 
 caminos = glob.glob(f"{path}/*.pdf")
 #caminos
 
 
-# In[15]:
+# In[8]:
 
 
 archivos = [ os.path.split(camino)[1] for camino in caminos]
 archivos
 
 
-# In[17]:
+# In[9]:
 
 
 nombres = [ archivo.replace('.pdf', '') for archivo in archivos ]
 nombres
 
 
-# In[18]:
+# In[10]:
 
 
 ahora_si = { 
@@ -103,14 +103,14 @@ ahora_si = {
 }
 
 
-# In[23]:
+# In[11]:
 
 
 [ ahora_si[key].sort() for key in ahora_si.keys() ]
 #ahora_si
 
 
-# In[24]:
+# In[12]:
 
 
 Pats = True
@@ -123,6 +123,23 @@ if Pats:
             with open(_file, 'r') as f:
               _strings.append(f.read())
         strings.update({
+            key: _strings
+        })
+
+
+# In[13]:
+
+
+Gus = True
+
+if Gus:
+    strings2 = {}
+    for key in ahora_si.keys():
+        _strings = []
+        for _file in ahora_si[key]:
+            with open(_file, 'r') as f:
+              _strings.append(f.read())
+        strings2.update({
             key: _strings
         })
 
@@ -140,19 +157,19 @@ if Pats:
 #pool.terminate()
 
 
-# In[71]:
+# In[14]:
 
 
 pool = mp.Pool()
 
 
-# In[72]:
+# In[15]:
 
 
 imagenes = pool.map(convert_from_path, caminos)
 
 
-# In[73]:
+# In[16]:
 
 
 archivos_en_imagenes = {
@@ -160,51 +177,34 @@ archivos_en_imagenes = {
 }
 
 
-# In[74]:
+# In[21]:
 
 
-archivos_en_imagenes[archivos[0]]
+# Muestra algún archivo :
+#archivos_en_imagenes[archivos[3]][1]
 
 
-# In[77]:
-
-
-strings2 = {
-    nombre: pool.map(pytesseract.image_to_string, archivo) for nombre, archivo in archivos_en_imagenes.items()
-}
-
-
-# In[76]:
+# In[22]:
 
 
 strings = images_to_strings(archivos_en_imagenes)
 
 
-# In[ ]:
-
-
-
-
-
-# In[106]:
+# In[26]:
 
 
 # Send all of these files to texts/
+save = True
 
-for nombre, hojas in strings.items():
-    for i, hoja in enumerate(hojas):
-        _file_name = os.path.join(path_textos, f"{nombre.replace('.pdf', '')}.{i}.txt")
-        with open(_file_name, "w") as f:
-                  f.write(hoja)
-
-
-# In[ ]:
-
+if save:
+    for nombre, hojas in strings.items():
+        for i, hoja in enumerate(hojas):
+            _file_name = os.path.join(path_textos, f"{nombre.replace('.pdf', '')}.{i}.txt")
+            with open(_file_name, "w") as f:
+                f.write(hoja)
 
 
-
-
-# In[82]:
+# In[27]:
 
 
 for lista in strings.values():
@@ -212,7 +212,7 @@ for lista in strings.values():
         print(regex.findall(r"\d{2}/\d{2}/\d{4}", string))
 
 
-# In[124]:
+# In[28]:
 
 
 _file = archivos[1]
@@ -221,7 +221,7 @@ print(len(strings[_file]))
 print(strings[_file][2])
 
 
-# In[101]:
+# In[29]:
 
 
 foo = strings[_file][2]
@@ -244,13 +244,13 @@ for line in foo_lines:
 """
 
 
-# In[102]:
+# In[30]:
 
 
 #print(foo)
 
 
-# In[103]:
+# In[39]:
 
 
 for line in foo_lines:
@@ -261,12 +261,12 @@ for line in foo_lines:
             print(2*'\t',j.group())
         for k in regex.finditer(r"(?<=(\d+\.\d+|\d+))\D[^\d]+?(?=\s)", i.string):
             print(3*'\t',k.group())
-        #for l in regex.finditer(r"()[\d]", i.string):
-            #print(4*"\t", l.group())
+        for l in regex.finditer(r"()[\d]", i.string):
+            print(4*"\t", l.group())
     #for i in regex.finditer(r"^[A-Z\s]+?(?=(\..+))", line): 
 
 
-# In[ ]:
+# In[32]:
 
 
 """
@@ -281,7 +281,7 @@ for line in foo_lines:
 """
 
 
-# In[43]:
+# In[33]:
 
 
 # My regexps :
@@ -298,14 +298,14 @@ my_better_extract_units_between_numbers = r"(?<=(\d+\.\d+|\d+))\D[^\.\d]+?(?=(\d
 my_extract_units_between_numbers_and_whitespace = r"(?<=(\d+\.\d+|\d+))\D[^\.\d]+?(?=\s)"
 
 
-# In[35]:
+# In[34]:
 
 
 dir(regex)
 help(regex.purge)
 
 
-# In[221]:
+# In[35]:
 
 
 for line in foo_lines:
@@ -313,16 +313,16 @@ for line in foo_lines:
         print(i)
 
 
-# In[152]:
+# In[36]:
 
 
-dir(i)
+#dir(i)
 
 
-# In[161]:
+# In[37]:
 
 
-i.expand()
+#i.expand()
 
 
 # In[129]:
@@ -331,10 +331,10 @@ i.expand()
 help(regex.compile)
 
 
-# In[128]:
+# In[38]:
 
 
-regex.compile()
+#regex.compile()
 
 
 # In[93]:
