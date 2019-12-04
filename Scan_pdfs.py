@@ -127,7 +127,7 @@ if Pats:
         })
 
 
-# In[13]:
+# In[17]:
 
 
 Gus = True
@@ -144,32 +144,32 @@ if Gus:
         })
 
 
-# In[30]:
+# In[18]:
 
 
 #print(strings[archivos[1]][1])
 
 
-# In[70]:
+# In[19]:
 
 
 #pool.close()
 #pool.terminate()
 
 
-# In[14]:
+# In[20]:
 
 
 pool = mp.Pool()
 
 
-# In[15]:
+# In[21]:
 
 
 imagenes = pool.map(convert_from_path, caminos)
 
 
-# In[16]:
+# In[22]:
 
 
 archivos_en_imagenes = {
@@ -177,14 +177,14 @@ archivos_en_imagenes = {
 }
 
 
-# In[21]:
+# In[23]:
 
 
 # Muestra algún archivo :
 #archivos_en_imagenes[archivos[3]][1]
 
 
-# In[22]:
+# In[24]:
 
 
 strings = images_to_strings(archivos_en_imagenes)
@@ -204,7 +204,7 @@ if save:
                 f.write(hoja)
 
 
-# In[27]:
+# In[26]:
 
 
 for lista in strings.values():
@@ -212,7 +212,7 @@ for lista in strings.values():
         print(regex.findall(r"\d{2}/\d{2}/\d{4}", string))
 
 
-# In[28]:
+# In[27]:
 
 
 _file = archivos[1]
@@ -221,7 +221,7 @@ print(len(strings[_file]))
 print(strings[_file][2])
 
 
-# In[29]:
+# In[28]:
 
 
 foo = strings[_file][2]
@@ -244,13 +244,13 @@ for line in foo_lines:
 """
 
 
-# In[30]:
+# In[29]:
 
 
 #print(foo)
 
 
-# In[39]:
+# In[30]:
 
 
 for line in foo_lines:
@@ -261,12 +261,12 @@ for line in foo_lines:
             print(2*'\t',j.group())
         for k in regex.finditer(r"(?<=(\d+\.\d+|\d+))\D[^\d]+?(?=\s)", i.string):
             print(3*'\t',k.group())
-        for l in regex.finditer(r"()[\d]", i.string):
-            print(4*"\t", l.group())
+        #for l in regex.finditer(r"()[\d]", i.string):
+            #print(4*"\t", l.group())
     #for i in regex.finditer(r"^[A-Z\s]+?(?=(\..+))", line): 
 
 
-# In[32]:
+# In[31]:
 
 
 """
