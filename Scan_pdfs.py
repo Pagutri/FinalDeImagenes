@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[60]:
+# In[1]:
 
 
 import os
@@ -33,7 +33,7 @@ import cv2 as cv
 import pytesseract
 
 
-# In[5]:
+# In[2]:
 
 
 import timing
@@ -41,14 +41,14 @@ importlib.reload(timing)
 import timing
 
 
-# In[61]:
+# In[3]:
 
 
 # Instantiate a multiprocess pool.
 pool = mp.Pool()
 
 
-# In[66]:
+# In[4]:
 
 
 @timing.time_log()
@@ -176,43 +176,29 @@ def guarda(x, resultados: Optional[str] = None):
     except:
         return False
 ##
-                                       
 
 
-# In[59]:
+# In[ ]:
 
 
-lol = dict_from_regex(strings[archivos[1]][1])
-lol
 
 
-# In[67]:
 
-
-guarda(strings)
-
-
-# In[57]:
-
-
-for archivo in archivos:
-    for hoja in strings[archivo]:
-        print(dict_from_regex(hoja))
-
-
-# In[33]:
+# In[5]:
 
 
 newline = lambda x: f"{x}\n"
 ntab = lambda n, txt: n*"\t" + txt
 
 
-# In[7]:
+# In[6]:
 
 
 path = os.path.abspath('analisis_clinicos/')
 path
 
+
+# Aquí se encuentran todos los pdf con análisis clínicos que tenemos.
 
 # In[8]:
 
@@ -221,7 +207,9 @@ path_textos = os.path.abspath('textos')
 path_textos
 
 
-# In[9]:
+# En esta dirección guardaremos todos los textos reconocidos por **pytesseract**.
+
+# In[10]:
 
 
 caminos_textos = glob.glob(f"{path_textos}/*.txt")
@@ -229,28 +217,38 @@ caminos_textos.sort()
 #caminos_textos
 
 
-# In[10]:
+# En esta dirección se almacenaron los textos que se extrajeron de los documentos a partir de **pytesseract**. Nótese que al procesar imagen por imagen, y al crear nosotros una imagen por cada página del pdf, los nombres que ahí se encuentran son los originales, sin la extensión pdf, con un punto indicando el nombre de página y con terminación txt.
+# 
+# ```mi_archivo.pdf```  => ```mi_archivo.i.txt``` Donde **i** indica el número de página.
+
+# In[12]:
 
 
 caminos = glob.glob(f"{path}/*.pdf")
 #caminos
 
 
-# In[11]:
+# Esta lista contiene el camino hacia cada uno de los PDFs de los cuales se desean extraer los datos.
+
+# In[15]:
 
 
 archivos = [ os.path.split(camino)[1] for camino in caminos]
 archivos
 
 
-# In[12]:
+# Nombre de los archivos PDF, sin el camino absoluto dentro del *filesystem*.
+
+# In[16]:
 
 
 nombres = [ archivo.replace('.pdf', '') for archivo in archivos ]
 nombres
 
 
-# In[13]:
+# Nombre de los archivos, sin la extensión ```.pdf```.
+
+# In[ ]:
 
 
 ahora_si = { 
@@ -382,29 +380,17 @@ pprint.pprint(dates)
 print(tab_by_regex(strings[archivos[1]][0]))
 
 
-# In[3]:
+# In[74]:
 
 
-s = set([1, 2, 3, 3])
+lol = dict_from_regex(strings['gustavo_maganna_2018-01-19.pdf'][0])
+lol
 
 
-# In[86]:
+# In[67]:
 
 
-s.discard(1)
-len(s)
-
-
-# In[85]:
-
-
-len(s.difference(s))
-
-
-# In[83]:
-
-
-dif.
+guarda(strings)
 
 
 # In[52]:
@@ -504,6 +490,14 @@ newline = lambda x: f"{x}\n"
 ntab = lambda n, txt: n*"\t" + txt
 
 
+# In[ ]:
+
+
+for archivo in archivos:
+    for hoja in strings[archivo]:
+        print(dict_from_regex(hoja))
+
+
 # In[27]:
 
 
@@ -571,45 +565,6 @@ for line in foo_lines:
         print(i)
 
 
-# In[36]:
-
-
-#dir(i)
-
-
-# In[37]:
-
-
-#i.expand()
-
-
-# In[129]:
-
-
-help(regex.compile)
-
-
-# In[38]:
-
-
-#regex.compile()
-
-
-# In[93]:
-
-
-[
-    reduce(lambda x, y: x + y if y.isupper() else x, line, '')
-    for line in woo
-]
-
-
-# In[95]:
-
-
-#dir('')
-
-
 # In[101]:
 
 
@@ -635,7 +590,7 @@ with open('watever', 'w') as lol:
     lol.write(strings[archivos[2]][0])
 
 
-# In[75]:
+# In[78]:
 
 
 # Cuántas líneas tenemos en total :
@@ -655,10 +610,10 @@ caracteres_por_linea = pd.core.series.Series(
 sns.distplot(caracteres)
 
 
-# In[36]:
+# In[ ]:
 
 
-archivos[0]
+
 
 
 # In[ ]:
@@ -667,18 +622,21 @@ archivos[0]
 
 
 
-# In[34]:
+# In[ ]:
 
 
-if False:
-    for pdf in strings:
-        for page in pdf:
-            print(page)
+
+
+
+# In[77]:
+
+
+pool.close()
+pool.terminate()
 
 
 # In[ ]:
 
 
-#pool.close()
-#pool.terminate()
+
 
