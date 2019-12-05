@@ -1,3 +1,5 @@
+ANIVERSARIO
+
 HOSPITAL
 ARANDA DE LA PARRA
 
@@ -5,29 +7,22 @@ TODA LA VIDA CONTIGO
 Paciente: GUSTAVO MAGANA LOPEZ
 
 Expediente:
-
 Fecha Nac.:06/08/1996
 
-Médico:JUAN CARLOS FERRER
-SERRANO
-
 LABORATORIO DE PATOLOGIA CLINICA
-
 AVENIDA HIDALGO No 329 C.P. : 37000 LEON, GTO.
 DIR. (477) 719-71-02 CONM. 719-71-00 EXT. 143 Y 145 TEL/FAX: 713-33-03
 
-Folio: 110318
-
-Edad: 23 ANOS Sexo: MASCULINO
-
-Fecha ingreso: 13-NOV-2019 07:17 AM
-
-Procedencia: H. ARANDA DE LA PARRA
-
-Cuarto—Cama:
+Edad: 23 ANOS Sexo: MASCULINO Cuarto—Cama:
 
 Seccién: EXTERNO
 Fecha—Hora ler Impresion:13-NOV-2019 01:52 PM
+
+Folio: 110318
+
+Fecha ingreso: 13-NOV-2019 07:17 AM
+
+Médico:JUAN CARLOS FERRER Procedencia: H. ARANDA DE LA PARRA
 
 Ultima Impresion: 13-NOV-2019 06:03 PM
 
@@ -35,32 +30,25 @@ Ultima Impresion: 13-NOV-2019 06:03 PM
 
  
 
- 
-
+SERRANO
 Estudio Resultado U. de Medida Intervalo de Referencia
-PERFIL DE LIPIDOS
-<200 mg/dl __riesgo bajo
-COLESTEROL.vesssssssssssssesssssesesssseensee 152 mg/dL ome eae
-< 200 Normal
-TRIGLICERIDOS 34 mg/dL deo 0008 |
-= >1000 Muy Alto
-VLDL COLESTEROL.....:scccssssssssecsssees 7 mg/dL 5-35
-< 100 Optimo
-100 - 129 Cercano al Optimo
-LDL COLESTEROL.. 91 mg/dL. 130-159 Limite Ato
->= 190 Muy Alto
-INDICE DE RIESGO CORONARIO
-BAJO... MAYOR A 55
-HDL COLESTEROL........cscccssscesssesesses 56 mg/dL INTERMEDIO... 35-55
-ALTO... MENOR A 35
-LIPIDOS TOTALES.....cccsccssssesssseeessseees 362 mg/dL 450 - 1000
-INDICE ATEROGENICO.........ccsss000000s 27 RESO INT oRME
+QUIMICA SANGUINEA 4V
+GLUCOSA..... eects 139 mg/dL 60 - 100
 
+14.7 mg/dL 8 - 26
+
+31 mg/dL 15 - 38
+
+we 0.94 mg/dL 0.61 - 1.24
+
+ACIDO URICO.Q..0.. eee cette 48 mg/dL 4.80 - 8.70
 METODOLOGIA: ESPECTROFOTOMETRIA AUTOMATIZADA
-
 TIPO DE MUESTRA: SUERO
+HEMOGLOBINA GLUCOSILADA ( HbA‘c )
+HEMOGLOBINA GLICOSILADA.......... 7.2 % 3.80 - 6.40
 
-Procesé:QFB LUIS PLASCENCIA PALACIOS di Dead
+METODOLOGIA: CROMATOGRAFIA DE ALTA PRESION (HPLC)
+TIPO DE MUESTRA: SANGRE TOTAL CON EDTA
 
 NOTA: Este reporte no constituye un diagndéstico. Consulte a su médico.
 
@@ -76,14 +64,10 @@ Aviso: Si requiere que los resultados sean emitidos en Unidades Internacionales,
 
 al laboratorio.
 
-Laboratorio Clinico acreditado por ema, a.c. con acreditacién No CL-078. Las pruebas en el alcance de la
-
-acreditaci6n estan identificadas con el simbolo V
-
-RIESGO INTERMEDIO: 4.5 - 8
-RIESGO BAJO: < 4.5
+Laboratorio Clinico acreditado por ema, a.c. con acreditacion No CL-078. Las pruebas en el alcance de la
+acreditacién estan identificadas con el simbolo V
 
 Atentamente
 Dr. Gilberto Aguilar Orozco.
 
-Pagina 2 de 3
+Pagina 1 de3

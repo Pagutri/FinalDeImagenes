@@ -1,83 +1,66 @@
-LABORATORIO DE PATOLOGIA CLINICA
-
-ANIVERSARIO
-
-HOSPITAL AVENIDA HIDALGO No 329 C.P. : 37000 LEON, GTO.
-
-BaDs eA Ee DIR. (477) 719-71-02 CONM. 719-71-00 EXT. 143 Y 145 TEL/FAX: 713-33-03
+HOSPITAL
+ARANDA DE LA PARRA
 
 TODA LA VIDA CONTIGO
-Paciente: GUSTAVO MAGANA LOPEZ Edad: 23 ANOS Sexo: MASCULINO Cuarto—Cama:
-Expediente: Folio: 110318 Seccion: EXTERNO
-Fecha Nac.:06/08/1996 Fecha ingreso: 13-NOV-2019 07:17 AM Fecha—Hora ler Impresion:13-NOV-2019 01:52 PM
-wee oN CARLOS FERRER Procedencia: H. ARANDA DE LA PARRA Ultima Impresion: 13-NOV-2019 06:03 PM
+Paciente: GUSTAVO MAGANA LOPEZ
+
+Expediente:
+
+Fecha Nac.:06/08/1996
+
+Médico:JUAN CARLOS FERRER
+SERRANO
+
+LABORATORIO DE PATOLOGIA CLINICA
+
+AVENIDA HIDALGO No 329 C.P. : 37000 LEON, GTO.
+DIR. (477) 719-71-02 CONM. 719-71-00 EXT. 143 Y 145 TEL/FAX: 713-33-03
+
+Folio: 110318
+
+Edad: 23 ANOS Sexo: MASCULINO
+
+Fecha ingreso: 13-NOV-2019 07:17 AM
+
+Procedencia: H. ARANDA DE LA PARRA
+
+Cuarto—Cama:
+
+Seccién: EXTERNO
+Fecha—Hora ler Impresion:13-NOV-2019 01:52 PM
+
+Ultima Impresion: 13-NOV-2019 06:03 PM
+
+ 
+
+ 
+
+ 
+
 Estudio Resultado U. de Medida Intervalo de Referencia
+PERFIL DE LIPIDOS
+<200 mg/dl __riesgo bajo
+COLESTEROL.vesssssssssssssesssssesesssseensee 152 mg/dL ome eae
+< 200 Normal
+TRIGLICERIDOS 34 mg/dL deo 0008 |
+= >1000 Muy Alto
+VLDL COLESTEROL.....:scccssssssssecsssees 7 mg/dL 5-35
+< 100 Optimo
+100 - 129 Cercano al Optimo
+LDL COLESTEROL.. 91 mg/dL. 130-159 Limite Ato
+>= 190 Muy Alto
+INDICE DE RIESGO CORONARIO
+BAJO... MAYOR A 55
+HDL COLESTEROL........cscccssscesssesesses 56 mg/dL INTERMEDIO... 35-55
+ALTO... MENOR A 35
+LIPIDOS TOTALES.....cccsccssssesssseeessseees 362 mg/dL 450 - 1000
+INDICE ATEROGENICO.........ccsss000000s 27 RESO INT oRME
 
- 
+METODOLOGIA: ESPECTROFOTOMETRIA AUTOMATIZADA
 
-EXAMEN GENERAL DE ORINA (EGO)/V
+TIPO DE MUESTRA: SUERO
 
-EXAMEN FISICO:
-
- 
-
- 
-
- 
-
- 
-
-  
-
- 
-
- 
-
- 
- 
-
- 
-
- 
-
- 
-
- 
-
- 
-
- 
-
-VOLUMEN. 50 mL
-
-AMARILLO
-
-TRANSPARENTE
-
-6 4.50 -8
-DENSIDAD 1.018 1.001 - 1.035
-EXAMEN QUiMICO:
-GLUCOSA ..eeescesssessssstessssecessecesstecastecees 50.0 mg/dL NEGATIVO
-PROTEINAS. NEGATIVO mg/dL NEGATIVO
-ACETONA.... NEGATIVO NEGATIVO
-HEMOGLOBINA.. NEGATIVO NEGATIVO
-PIG. BILIARES.... NEGATIVO NEGATIVO
-ESTERASA LEUCOCITARIA.. NEGATIVO NEGATIVO
-NITRITOS NEGATIVO NEGATIVO
-UROBILINOGENO. 0.2 mg/dL 0.2
-EXAMEN MICROSCOPICO:
-LEUCOCITOS.. vs 1 CAMPO 0-3
-ERITROCITOS. 1 CAMPO 0-3
-CRISTALES.. AUSENTES NO SE OBSERVAN
-CILINDROS.. AUSENTES CAMPO AUSENTES
-CELS. EPITELIALES. ESCASAS CAMPO ESCASAS
-BACTERIAS. vs ESCASAS CAMPO ESCASAS
-LEVADURAS AUSENTES CAMPO AUSENTES
-
-METODOLOGIA: COLORIMETRIA POR DOBLE REFRACTANCIA
-TIPO DE MUESTRA: ORINA
-
-Proces6:T.L.Q. MONICA ZARETH DAVALOS ALMANZA g ie
+Procesé:QFB LUIS PLASCENCIA PALACIOS di Dead
 
 NOTA: Este reporte no constituye un diagndéstico. Consulte a su médico.
 
@@ -93,10 +76,14 @@ Aviso: Si requiere que los resultados sean emitidos en Unidades Internacionales,
 
 al laboratorio.
 
-Laboratorio Clinico acreditado por ema, a.c. con acreditacion No CL-078. Las pruebas en el alcance de la
-acreditacién estan identificadas con el simbolo V
+Laboratorio Clinico acreditado por ema, a.c. con acreditacién No CL-078. Las pruebas en el alcance de la
+
+acreditaci6n estan identificadas con el simbolo V
+
+RIESGO INTERMEDIO: 4.5 - 8
+RIESGO BAJO: < 4.5
 
 Atentamente
 Dr. Gilberto Aguilar Orozco.
 
-Pagina 3 de 3
+Pagina 2 de 3
