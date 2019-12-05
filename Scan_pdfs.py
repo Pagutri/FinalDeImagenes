@@ -47,7 +47,7 @@ import timing
 pool = mp.Pool()
 
 
-# In[30]:
+# In[41]:
 
 
 @timing.time_log()
@@ -84,6 +84,33 @@ def tab_by_regex(x: str) -> str:
                 _my_str += newline(ntab(3, k.group()))
     
     return _my_str
+##
+
+@timing.time_log()
+def dict_from_regex(x: str) -> str:
+    """
+    """
+    
+    _x_lines: List[str] = x.split('\n')
+    
+    _dict2 = {}
+    for line in _x_lines:
+        for i in regex.finditer(r"^([A-Z\s]|[A-Z]\.?)+?(?=(\..+))", line): 
+            i.group()
+            _valores = []
+            _unidades = []
+            for j in regex.finditer(r"(\d+\.\d+|\d+)", i.string): # find groups of numbers
+                _valores.append(j.group())
+            for k in regex.finditer(r"(?<=(\d+\.\d+|\d+))\D[^\d]+?(?=\s)", i.string):
+                _unidades.append(k.group())
+            _dict2.update({
+                i.group(): {
+                    "values": _valores,
+                    "units": _unidades
+                }
+            })
+    
+    return _dict2
 ##
 
 @timing.time_log()
@@ -126,14 +153,21 @@ def extract_date(x: Dict[str, List[str]], exclude_date: Optional[str] = None):
         for nombre, lista in dates.items():
             dates[nombre] = lfilter(lambda x: x if x != exclude_date else False, lista)
     
-    pprint.pprint(dates)
+    return dates
 ##
 
 
-# In[31]:
+# In[45]:
 
 
-extract_date(strings)
+pprint.pprint(dict_from_regex(strings[archivos[1]][1]))
+
+
+# In[33]:
+
+
+newline = lambda x: f"{x}\n"
+ntab = lambda n, txt: n*"\t" + txt
 
 
 # In[7]:
@@ -229,44 +263,18 @@ if Gus:
         })
 
 
-# In[17]:
+# In[34]:
 
 
-#print(strings[archivos[1]][1])
+# Obtain text from the PDFs, directly (this takes about a minute) : 
+from_scratch = False
 
-
-# In[18]:
-
-
-#pool.close()
-#pool.terminate()
-
-
-# In[20]:
-
-
-imagenes = pool.map(convert_from_path, caminos)
-
-
-# In[22]:
-
-
-archivos_en_imagenes = {
-    archivo: imagen for archivo, imagen in zip(archivos, imagenes)
-}
-
-
-# In[23]:
-
-
-# Muestra algún archivo :
-#archivos_en_imagenes[archivos[3]][1]
-
-
-# In[24]:
-
-
-strings = images_to_strings(archivos_en_imagenes)
+if from_scratch:
+    imagenes = pool.map(convert_from_path, caminos)
+    archivos_en_imagenes = {
+        archivo: imagen for archivo, imagen in zip(archivos, imagenes)
+    }
+    strings = images_to_strings(archivos_en_imagenes)
 
 
 # In[13]:
@@ -329,6 +337,12 @@ for nombre, lista in dates.items():
     
 
 pprint.pprint(dates)
+
+
+# In[37]:
+
+
+print(tab_by_regex(strings[archivos[1]][0]))
 
 
 # In[3]:
@@ -628,5 +642,6 @@ if False:
 # In[ ]:
 
 
-
+#pool.close()
+#pool.terminate()
 
