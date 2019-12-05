@@ -48,7 +48,7 @@ import timing
 pool = mp.Pool()
 
 
-# In[64]:
+# In[66]:
 
 
 @timing.time_log()
@@ -171,7 +171,7 @@ def guarda(x, resultados: Optional[str] = None):
         with open(resultados, 'a') as f:
             for archivo in _archivos:
                 for hoja in x[archivo]:
-                    f.write(f"{json.dumps(dict_from_regex(hoja)))
+                    f.write(f"{json.dumps(dict_from_regex(hoja))}\n")
         return True
     except:
         return False
@@ -186,7 +186,7 @@ lol = dict_from_regex(strings[archivos[1]][1])
 lol
 
 
-# In[65]:
+# In[67]:
 
 
 guarda(strings)
