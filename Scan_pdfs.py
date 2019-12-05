@@ -47,7 +47,7 @@ import timing
 pool = mp.Pool()
 
 
-# In[41]:
+# In[50]:
 
 
 @timing.time_log()
@@ -103,12 +103,13 @@ def dict_from_regex(x: str) -> str:
                 _valores.append(j.group())
             for k in regex.finditer(r"(?<=(\d+\.\d+|\d+))\D[^\d]+?(?=\s)", i.string):
                 _unidades.append(k.group())
-            _dict2.update({
-                i.group(): {
-                    "values": _valores,
-                    "units": _unidades
-                }
-            })
+            if len(_valores) < 4 and len(_unidades) < 4:
+                _dict2.update({
+                    i.group(): {
+                        "values": _valores,
+                        "units": _unidades
+                    }
+                })
     
     return _dict2
 ##
@@ -157,10 +158,17 @@ def extract_date(x: Dict[str, List[str]], exclude_date: Optional[str] = None):
 ##
 
 
-# In[45]:
+# In[51]:
 
 
-pprint.pprint(dict_from_regex(strings[archivos[1]][1]))
+lol = dict_from_regex(strings[archivos[1]][1])
+lol
+
+
+# In[ ]:
+
+
+
 
 
 # In[33]:
