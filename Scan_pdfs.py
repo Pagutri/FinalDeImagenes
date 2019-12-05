@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[29]:
+# In[60]:
 
 
 import os
@@ -10,6 +10,7 @@ import glob
 import multiprocessing as mp
 import importlib
 import pprint
+import json
 
 from typing import Tuple, Callable, Any, NoReturn, List, Dict, Optional
 
@@ -40,14 +41,14 @@ importlib.reload(timing)
 import timing
 
 
-# In[19]:
+# In[61]:
 
 
 # Instantiate a multiprocess pool.
 pool = mp.Pool()
 
 
-# In[52]:
+# In[64]:
 
 
 @timing.time_log()
@@ -156,19 +157,47 @@ def extract_date(x: Dict[str, List[str]], exclude_date: Optional[str] = None):
     
     return dates
 ##
+                                       
+@timing.time_log()
+def guarda(x, resultados: Optional[str] = None):
+    """
+    """
+    
+    try:
+        _archivos = x.keys()
+        if resultados is None:
+            resultados = 'resultados.jl'
+                                       
+        with open(resultados, 'a') as f:
+            for archivo in _archivos:
+                for hoja in x[archivo]:
+                    f.write(f"{json.dumps(dict_from_regex(hoja)))
+        return True
+    except:
+        return False
+##
+                                       
 
 
-# In[53]:
+# In[59]:
 
 
 lol = dict_from_regex(strings[archivos[1]][1])
 lol
 
 
-# In[ ]:
+# In[65]:
 
 
+guarda(strings)
 
+
+# In[57]:
+
+
+for archivo in archivos:
+    for hoja in strings[archivo]:
+        print(dict_from_regex(hoja))
 
 
 # In[33]:
