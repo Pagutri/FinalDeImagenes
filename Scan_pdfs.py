@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[73]:
+# In[29]:
 
 
 import os
@@ -11,7 +11,7 @@ import multiprocessing as mp
 import importlib
 import pprint
 
-from typing import Tuple, Callable, Any, NoReturn, List, Dict
+from typing import Tuple, Callable, Any, NoReturn, List, Dict, Optional
 
 from functools import partial, reduce
 
@@ -32,7 +32,7 @@ import cv2 as cv
 import pytesseract
 
 
-# In[2]:
+# In[5]:
 
 
 import timing
@@ -40,7 +40,14 @@ importlib.reload(timing)
 import timing
 
 
-# In[47]:
+# In[19]:
+
+
+# Instantiate a multiprocess pool.
+pool = mp.Pool()
+
+
+# In[30]:
 
 
 @timing.time_log()
@@ -100,24 +107,50 @@ def save_results(x: Dict[str, List[str]]):
         return True
     except:
         return False
+##                                    
+
+@timing.time_log()
+def extract_date(x: Dict[str, List[str]], exclude_date: Optional[str] = None):
+    dates = {}
+    for nombre, lista in x.items():
+        _tmp_list = []
+        for string in lista:
+            _tmp_list += list(set(
+                regex.findall(r"(\d{2}\D[A-Z]{3}\D\d{4}|\d{2}\D\d{2}\D\d{4})", string)
+            ))
+        dates.update({
+            nombre: list(set(_tmp_list))
+        })
+
+    if exclude_date is not None:
+        for nombre, lista in dates.items():
+            dates[nombre] = lfilter(lambda x: x if x != exclude_date else False, lista)
+    
+    pprint.pprint(dates)
 ##
 
 
-# In[4]:
+# In[31]:
+
+
+extract_date(strings)
+
+
+# In[7]:
 
 
 path = os.path.abspath('analisis_clinicos/')
 path
 
 
-# In[5]:
+# In[8]:
 
 
 path_textos = os.path.abspath('textos')
 path_textos
 
 
-# In[6]:
+# In[9]:
 
 
 caminos_textos = glob.glob(f"{path_textos}/*.txt")
@@ -125,28 +158,28 @@ caminos_textos.sort()
 #caminos_textos
 
 
-# In[7]:
+# In[10]:
 
 
 caminos = glob.glob(f"{path}/*.pdf")
 #caminos
 
 
-# In[19]:
+# In[11]:
 
 
 archivos = [ os.path.split(camino)[1] for camino in caminos]
 archivos
 
 
-# In[9]:
+# In[12]:
 
 
 nombres = [ archivo.replace('.pdf', '') for archivo in archivos ]
 nombres
 
 
-# In[10]:
+# In[13]:
 
 
 ahora_si = { 
@@ -155,14 +188,14 @@ ahora_si = {
 }
 
 
-# In[11]:
+# In[14]:
 
 
 [ ahora_si[key].sort() for key in ahora_si.keys() ]
 #ahora_si
 
 
-# In[12]:
+# In[15]:
 
 
 Pats = True
@@ -179,7 +212,7 @@ if Pats:
         })
 
 
-# In[13]:
+# In[16]:
 
 
 Gus = True
@@ -196,13 +229,13 @@ if Gus:
         })
 
 
-# In[18]:
+# In[17]:
 
 
 #print(strings[archivos[1]][1])
 
 
-# In[19]:
+# In[18]:
 
 
 #pool.close()
@@ -210,12 +243,6 @@ if Gus:
 
 
 # In[20]:
-
-
-pool = mp.Pool()
-
-
-# In[21]:
 
 
 imagenes = pool.map(convert_from_path, caminos)
@@ -256,7 +283,7 @@ if save:
                 f.write(hoja)
 
 
-# In[14]:
+# In[22]:
 
 
 for lista in strings.values():
@@ -264,7 +291,7 @@ for lista in strings.values():
         print(regex.findall(r"\d{2}/\d{2}/\d{4}", string))
 
 
-# In[74]:
+# In[23]:
 
 
 dates = {}
@@ -275,14 +302,36 @@ for nombre, lista in strings.items():
         if len(_tmp_list) == 0:
             _tmp_list.append(_tmp_val)
         else:
-            if _tmp_val
+            if _tmp_val not in _tmp_list:
+                _tmp_list.append(_tmp_val)
     dates.update({
         nombre: _tmp_list
     })
 pprint.pprint(dates)
 
 
-# In[79]:
+# In[26]:
+
+
+dates = {}
+for nombre, lista in strings.items():
+    _tmp_list = []
+    for string in lista:
+        _tmp_list += list(set(
+            regex.findall(r"(\d{2}\D[A-Z]{3}\D\d{4}|\d{2}\D\d{2}\D\d{4})", string)
+        ))
+    dates.update({
+        nombre: list(set(_tmp_list))
+    })
+
+for nombre, lista in dates.items():
+    dates[nombre] = lfilter(lambda x: x if x != someval else False, lista)
+    
+
+pprint.pprint(dates)
+
+
+# In[3]:
 
 
 s = set([1, 2, 3, 3])
