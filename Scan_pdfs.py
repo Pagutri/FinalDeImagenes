@@ -350,7 +350,7 @@ nombres
 
 # Nombre de los archivos, sin la extensión ```.pdf```.
 
-# In[13]:
+# In[15]:
 
 
 ahora_si = { 
@@ -359,14 +359,14 @@ ahora_si = {
 }
 
 
-# In[14]:
+# In[16]:
 
 
 [ ahora_si[key].sort() for key in ahora_si.keys() ]
 #ahora_si
 
 
-# In[15]:
+# In[17]:
 
 
 parse_from_txt = True
@@ -411,7 +411,7 @@ if parse_from_txt:
 
 
 
-# In[16]:
+# In[18]:
 
 
 # Obtain text from the PDFs, directly (this takes about a minute) : 
@@ -434,7 +434,7 @@ if from_pdfs:
     strings = images_to_strings(archivos_en_imagenes)
 
 
-# In[17]:
+# In[19]:
 
 
 # Guardamos cada uno de los strings generados, 
@@ -451,7 +451,7 @@ if save:
                 f.write(hoja)
 
 
-# In[18]:
+# In[20]:
 
 
 extract_dates(strings, exclude_date='06/08/1996')
@@ -459,7 +459,7 @@ extract_dates(strings, exclude_date='06/08/1996')
 
 # Esta función que creamos ```extract_date()``` permite obtener fechas encontradas en un PDF, con flexibilidad en cuanto a formatos y la posibilidad de excluir una fecha especificada, que bien podría ser la fecha de cumpleaños del paciente.
 
-# In[19]:
+# In[21]:
 
 
 print(tab_by_regex(strings[archivos[1]][0]))
@@ -469,20 +469,20 @@ print(tab_by_regex(strings[archivos[1]][0]))
 # 
 # Esto se deberá tomar en cuenta el momento de generar los registros.
 
-# In[21]:
+# In[22]:
 
 
 ejemplo = dict_from_regex(strings['gustavo_maganna_2018-01-19.pdf'][0])
 print(build_string_from_dict(ejemplo))
 
 
-# In[22]:
+# In[23]:
 
 
 save_to_jsonl(strings)
 
 
-# In[31]:
+# In[24]:
 
 
 _file = archivos[1]
@@ -494,13 +494,13 @@ print("\n\n#####################################################################
 print("Parámetros encontrados : \n",build_string_from_dict(dict_from_regex(strings[_file][_pagenum]) ))
 
 
-# In[35]:
+# In[25]:
 
 
 save_results(strings)
 
 
-# In[104]:
+# In[26]:
 
 
 for i, archivo in enumerate(archivos):
@@ -509,14 +509,14 @@ for i, archivo in enumerate(archivos):
             f.write(tab_by_regex(page))
 
 
-# In[105]:
+# In[27]:
 
 
 newline = lambda x: f"{x}\n"
 ntab = lambda n, txt: n*"\t" + txt
 
 
-# In[43]:
+# In[28]:
 
 
 for archivo in archivos:
@@ -525,7 +525,7 @@ for archivo in archivos:
         print(tab_by_regex(hoja))
 
 
-# In[44]:
+# In[29]:
 
 
 _my_str = ''
@@ -539,28 +539,13 @@ for line in foo_lines:
             _my_str += newline(ntab(3, k.group()))
 
 
-# In[45]:
+# In[30]:
 
 
 print(_my_str)
 
 
 # In[31]:
-
-
-"""
-for line in foo_lines:
-    for i in regex.finditer(r"^([A-Z\s]|[A-Z]\.?)+?(?=(\..+))", line): # FIND lines starting with Caps 
-        print(i.string)
-        print('\t',i.group())
-        for j in regex.finditer(r"(\d+\.\d+|\d+)", i.string): # find groups of numbers
-            print(2*'\t',j.group())
-        for k in regex.finditer(r"(?<=(\d+\.\d+|\d+))\D[^\d]+?(?=\s)", i.string):
-            print(3*'\t',k.group())
-"""
-
-
-# In[33]:
 
 
 # My regexps :
@@ -577,68 +562,24 @@ my_better_extract_units_between_numbers = r"(?<=(\d+\.\d+|\d+))\D[^\.\d]+?(?=(\d
 my_extract_units_between_numbers_and_whitespace = r"(?<=(\d+\.\d+|\d+))\D[^\.\d]+?(?=\s)"
 
 
-# In[92]:
-
-
-dir(regex)
-help(regex.purge)
-
-
-# In[ ]:
-
-
-
-
-
-# In[101]:
-
-
-x = "\n hola \n"
-
-
-# In[103]:
-
-
-r"{}".format(x)
-
-
-# In[99]:
-
-
-print(r'\n\nhola')
-
-
-# In[74]:
-
-
-with open('watever', 'w') as lol:
-    lol.write(strings[archivos[2]][0])
-
-
-# In[78]:
+# In[34]:
 
 
 # Cuántas líneas tenemos en total :
 caracteres_por_linea = pd.core.series.Series(
     [
      len(line) for line in page.split('\n') 
-     for pdf in strings 
+     for pdf in strings
      for page in pdf
     ],
     name='caracteres'
 )
 
 
-# In[76]:
+# In[41]:
 
 
-sns.distplot(caracteres)
-
-
-# In[ ]:
-
-
-
+sns.distplot(caracteres_por_linea, kde=False)
 
 
 # In[ ]:
@@ -653,11 +594,23 @@ sns.distplot(caracteres)
 
 
 
-# In[77]:
+# In[ ]:
+
+
+
+
+
+# In[42]:
 
 
 pool.close()
 pool.terminate()
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
