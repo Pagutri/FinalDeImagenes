@@ -500,13 +500,10 @@ print("Parámetros encontrados : \n",build_string_from_dict(dict_from_regex(stri
 save_results(strings)
 
 
-# In[26]:
+# In[ ]:
 
 
-for i, archivo in enumerate(archivos):
-    for j, page in enumerate(strings[archivo]):
-        with open(os.path.join(camino_resultados, f"{nombres[i]}.{j+1}.txt"), 'w') as f:
-            f.write(tab_by_regex(page))
+
 
 
 # In[27]:
@@ -525,18 +522,10 @@ for archivo in archivos:
         print(tab_by_regex(hoja))
 
 
-# In[29]:
+# In[ ]:
 
 
-_my_str = ''
-for line in foo_lines:
-    for i in regex.finditer(r"^([A-Z\s]|[A-Z]\.?)+?(?=(\..+))", line): # FIND lines starting with Caps 
-        _my_str += newline(i.string)
-        _my_str += newline(ntab(1, i.group()))
-        for j in regex.finditer(r"(\d+\.\d+|\d+)", i.string): # find groups of numbers
-            _my_str += newline(ntab(2, j.group()))
-        for k in regex.finditer(r"(?<=(\d+\.\d+|\d+))\D[^\d]+?(?=\s)", i.string):
-            _my_str += newline(ntab(3, k.group()))
+
 
 
 # In[30]:
