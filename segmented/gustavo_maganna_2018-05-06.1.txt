@@ -17,7 +17,7 @@ ARANDA DE LA PARRA DIR. (477) 719-71-02 CONM. 719-71-00 EXT. 143 Y 145 TEL/FAX: 
 			 Y
 			 TEL/FAX:
 HEMOGLOBINA........0ccccceeeeeeeeeeeee 16.9 g/dL t 14.10 - 16.30
-	HEMOGLOBINA
+	HEMOGLOBINA.
 		0
 		16.9
 		14.10
@@ -32,21 +32,21 @@ HEMATOCRITO. 48.0 % tT 41-47
 		47
 			 %
 V.C.M.... 86.2 fL 84 - 94
-	V
+	V.C.M.
 		86.2
 		84
 		94
 			 fL
 			 -
 LEUCOCITOS.......cccccecceecneeeeeeeeee 5.9 Mil/microL 5.30 - 9.50
-	LEUCOCITOS
+	LEUCOCITOS.
 		5.9
 		5.30
 		9.50
 			 Mil/microL
 			 -
 PLAQUETAS.......0ccccccceeee tsetse 163 Mil/microL 150 - 450
-	PLAQUETAS
+	PLAQUETAS.
 		0
 		163
 		150

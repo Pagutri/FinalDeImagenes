@@ -17,48 +17,48 @@ ARANDA DE LA PARRA DIR. (477) 719-71-02 CONM. 719-71-00 EXT. 143 Y 145 TEL/FAX: 
 			 Y
 			 TEL/FAX:
 COLESTEROL....sssssssssssssssesssssssseeeeees 118 mg/dL | 140 - 200 v
-	COLESTEROL
+	COLESTEROL.
 		118
 		140
 		200
 			 mg/dL
 			 -
 TRIGLICERIDOS ....csscsscssessenseesee 50 mg/dL 300-500 Noe v
-	TRIGLICERIDOS 
+	TRIGLICERIDOS .
 		50
 		300
 		500
 			 mg/dL
 			 Noe
 VLDL COLESTEROL.....s-:ssccssssssseeeeeee 10 mg/dL 5-35
-	VLDL COLESTEROL
+	VLDL COLESTEROL.
 		10
 		5
 		35
 			 mg/dL
 LDL COLESTEROL...sscssssssssessssesenee 72 mg/dL 130. 169 Lenwnte ato v
-	LDL COLESTEROL
+	LDL COLESTEROL.
 		72
 		130
 		169
 			 mg/dL
 			 Lenwnte
 HDL COLESTEROL.......csssccsssseeeesseee 33 mg/dL IEERMEDIO. cases v
-	HDL COLESTEROL
+	HDL COLESTEROL.
 		33
 			 mg/dL
 ALTO... MENOR A 35,
-	ALTO
+	ALTO.
 		35
 LIPIDOS TOTALES......:ssssssscsseeesssesseees 337 mg/dL | 450 - 1000
-	LIPIDOS TOTALES
+	LIPIDOS TOTALES.
 		337
 		450
 		1000
 			 mg/dL
 			 -
 INDICE ATEROGENICO... 3.6 RiEScO INTERMEDIO: 4.5 -8
-	INDICE ATEROGENICO
+	INDICE ATEROGENICO.
 		3.6
 		4.5
 		8

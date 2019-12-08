@@ -21,39 +21,39 @@ COLESTEROL.vesssssssssssssesssssesesssseensee 152 mg/dL ome eae
 		152
 			 mg/dL
 VLDL COLESTEROL.....:scccssssssssecsssees 7 mg/dL 5-35
-	VLDL COLESTEROL
+	VLDL COLESTEROL.
 		7
 		5
 		35
 			 mg/dL
 LDL COLESTEROL.. 91 mg/dL. 130-159 Limite Ato
-	LDL COLESTEROL
+	LDL COLESTEROL.
 		91
 		130
 		159
 			 mg/dL.
 			 Limite
 BAJO... MAYOR A 55
-	BAJO
+	BAJO.
 		55
 HDL COLESTEROL........cscccssscesssesesses 56 mg/dL INTERMEDIO... 35-55
-	HDL COLESTEROL
+	HDL COLESTEROL.
 		56
 		35
 		55
 			 mg/dL
 ALTO... MENOR A 35
-	ALTO
+	ALTO.
 		35
 LIPIDOS TOTALES.....cccsccssssesssseeessseees 362 mg/dL 450 - 1000
-	LIPIDOS TOTALES
+	LIPIDOS TOTALES.
 		362
 		450
 		1000
 			 mg/dL
 			 -
 INDICE ATEROGENICO.........ccsss000000s 27 RESO INT oRME
-	INDICE ATEROGENICO
+	INDICE ATEROGENICO.
 		000000
 		27
 			 RESO

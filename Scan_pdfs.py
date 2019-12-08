@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[71]:
 
 
 import os
@@ -12,7 +12,7 @@ import importlib
 import pprint
 import json
 
-from typing import Tuple, Callable, Any, NoReturn, List, Dict, Optional
+from typing import Tuple, Callable, Any, NoReturn, List, Dict, Optional, Union
 
 from functools import partial, reduce
 
@@ -33,7 +33,7 @@ import cv2 as cv
 import pytesseract
 
 
-# In[2]:
+# In[72]:
 
 
 import timing
@@ -41,19 +41,29 @@ importlib.reload(timing)
 import timing
 
 
-# In[3]:
+# In[73]:
 
 
 # Instantiate a multiprocess pool.
 pool = mp.Pool()
 
 
-# In[4]:
+# In[112]:
 
 
 @timing.time_log()
-def images_to_strings(x):
-    """
+def images_to_strings(x) -> Dict[str, List[str]]:
+    """ Envoltura para generar un diccionario del tipo :
+            {
+                "nombre del archivo PDF": [Lista de strings, uno por página]
+            }
+        
+        A partir de un diccionario del tipo:
+            { 
+                "nombre del achivo PDF": [Lista contendiendo una imagen por página]
+            }
+            
+        
     """
     
     return {
@@ -74,7 +84,9 @@ def tab_by_regex(x: str) -> str:
         
     for line in _x_lines:
         # Match lines starting with Caps, separated by spaces or points : 
-        for i in regex.finditer(r"^([A-Z\s]|[A-Z]\.?)+?(?=(\..+))", line): 
+        # r"^([A-Z\s|[A-Z]\.?)+?(?=(\..+))" # found on a separate cell down
+        # r"^([A-Z\s]|[A-Z]\.?)+?(?=(\..+))" # the legacy regex for this func
+        for i in regex.finditer(r"^([A-Z\s|[A-Z]\.?)+?(?=(\..+))", line): 
             _my_str += newline(i.string)
             _my_str += newline(ntab(1, i.group()))
             # Match numbers, which could be either integers or floats : 
@@ -90,21 +102,24 @@ def tab_by_regex(x: str) -> str:
 @timing.time_log()
 def dict_from_regex(x: str) -> str:
     """
+        Genera un directorio con los valores deseado
     """
     
     _x_lines: List[str] = x.split('\n')
     
     _dict2 = {}
     for line in _x_lines:
-        for i in regex.finditer(r"^([A-Z\s]|[A-Z]\.?)+?(?=(\..+))", line): 
+        for i in regex.finditer(r"^([A-Z\s|[A-Z]\.?)+?(?=(\..+))", line): 
             i.group()
             _valores = []
             _unidades = []
-            for j in regex.finditer(r"(\d+\.\d+|\d+)", i.string): # find groups of numbers
+            # Match numbers, which could be either integers or floats : 
+            for j in regex.finditer(r"(\d+\.\d+|\d+)", i.string):
                 _valores.append(float(j.group()))
+            # Match strings found between numbers :
             for k in regex.finditer(r"(?<=(\d+\.\d+|\d+))\D[^\d]+?(?=\s)", i.string):
                 _unidades.append(k.group())
-            if len(_valores) < 4 and len(_unidades) < 4:
+            if len(_valores) < 5 and len(_unidades) < 5:
                 _dict2.update({
                     i.group(): {
                         "values": _valores,
@@ -116,9 +131,23 @@ def dict_from_regex(x: str) -> str:
 ##
 
 @timing.time_log()
-def save_results(x: Dict[str, List[str]]):
+def save_results(x: Dict[str, List[str]]) -> bool:
     """
+        Guarda los strings a los cuales ya se les han aplicado los filtros.
+            
+        El modo de escritura es 'w', o sea 'write'.
+        Cada vez que se llame esta función los resultados anteriormente guardados 
+        serán sobreescritos por los nuevos generados.
         
+        La función crea un directorio llamado 'segmented' si es que 
+        éste no existe.
+        
+        Después guarda todos los archivos en dicho directorio.
+        
+        Regresa:
+            'True',  si se logran generar los archivos.
+            
+            'False', si ocurre algún error.
     """
     
     try:
@@ -139,7 +168,20 @@ def save_results(x: Dict[str, List[str]]):
 ##                                    
 
 @timing.time_log()
-def extract_date(x: Dict[str, List[str]], exclude_date: Optional[str] = None):
+def extract_dates(
+    x: Dict[str, List[str]], 
+    exclude_date: Optional[str] = None
+) -> Dict[str, List[str]]:
+    """
+        Busca las fechas en un diccionario del siguiente formato :
+            { str: Dict[str, List[str]] }
+            
+        Genera un diccionario con las mismas llaves, pero con una lista 
+        de las fechas que encontró en las hojas (cada uno de los strings 
+        dentro de la lista).
+
+    """
+    
     dates = {}
     for nombre, lista in x.items():
         _tmp_list = []
@@ -153,22 +195,50 @@ def extract_date(x: Dict[str, List[str]], exclude_date: Optional[str] = None):
 
     if exclude_date is not None:
         for nombre, lista in dates.items():
-            dates[nombre] = lfilter(lambda x: x if x != exclude_date else False, lista)
+            dates[nombre] = list(
+                filter(lambda x: x if x != exclude_date else False, lista)
+            )
     
     return dates
 ##
                                        
 @timing.time_log()
-def guarda(x, resultados: Optional[str] = None):
+def save_to_jsonl(x: Dict[str, List[str]], filename: Optional[str] = None) -> bool:
     """
+        Guarda los resultados en un archivo, cuyo nombre puede 
+        ser opcionalmente especificado a través del parámetro 'filename'.
+        
+        El NOMBRE por defecto es :
+            'resultados.jl'
+            
+        El nombre del archivo 'filename' puede ser un camino absoluto, si
+        se desea guardar la información en algún otro lugar.
+        
+        POR DEFECTO se trata del mismo directorio :
+            En la línea de comando :
+                `pwd`
+                
+            Desde Python :
+                os.path.abspath('.')
+        
+        El formato de registro es JSON-lines :
+            http://jsonlines.org/
+            
+        El modo de edición del archivo es 'append', 
+        es decir los nuevos registros se añaden, sin borrar 
+        las líneas anteriores.
+        
+        Prámetros :
+                   x: Diccionario { str: List[str] }, la información por guardar.
+            filename: Opcional, str, nombre del archivo de registro.
     """
     
     try:
         _archivos = x.keys()
-        if resultados is None:
-            resultados = 'resultados.jl'
+        if filename is None:
+            filename = 'resultados.jl'
                                        
-        with open(resultados, 'a') as f:
+        with open(filename, 'a') as f:
             for archivo in _archivos:
                 for hoja in x[archivo]:
                     f.write(f"{json.dumps(dict_from_regex(hoja))}\n")
@@ -177,21 +247,53 @@ def guarda(x, resultados: Optional[str] = None):
         return False
 ##
 
+@timing.time_log()                                     
+def build_string_from_dict(x: Union[Dict[str, List[str]], List[Dict[str, Any]]]) -> str:
+    ''' 
+        Construye una cadena de caracteres a partir de una de
+        dos posibles estructuras anidadas :
+        
+        1. Diccionario :  {   str: List[str] }
+        2. Lista       :  [ { str: Any }     ]
+        
+        Esta cadena de caracteres es óptima para la visualización.
+    '''
+    newline = lambda x: f"{x}\n"
+    ntab = lambda n, txt: n*"\t" + txt
+                                       
+    my_string = ''
+    
+    if type(x) is list:
+        for entry in x:
+            for key in entry.keys():
+                my_string += f'{key}: {entry[key]}\n'
+            my_string += '\n\n'
+    elif type(x) is dict:
+        for key1, value in x.items():
+            my_string += f"{key1}:\n"
+            for key2 in value.keys():
+                my_string += f'\t{key2}: {value[key2]}\n'
+            my_string += '\n\n'
+                                       
+    
+    return my_string
+##
 
-# In[ ]:
+
+# In[113]:
 
 
+type({}) is dict
 
 
-
-# In[5]:
+# In[114]:
 
 
 newline = lambda x: f"{x}\n"
 ntab = lambda n, txt: n*"\t" + txt
 
 
-# In[6]:
+# In[115]:
 
 
 path = os.path.abspath('analisis_clinicos/')
@@ -200,7 +302,7 @@ path
 
 # Aquí se encuentran todos los pdf con análisis clínicos que tenemos.
 
-# In[8]:
+# In[116]:
 
 
 path_textos = os.path.abspath('textos')
@@ -209,7 +311,7 @@ path_textos
 
 # En esta dirección guardaremos todos los textos reconocidos por **pytesseract**.
 
-# In[10]:
+# In[117]:
 
 
 caminos_textos = glob.glob(f"{path_textos}/*.txt")
@@ -221,7 +323,7 @@ caminos_textos.sort()
 # 
 # ```mi_archivo.pdf```  => ```mi_archivo.i.txt``` Donde **i** indica el número de página.
 
-# In[12]:
+# In[118]:
 
 
 caminos = glob.glob(f"{path}/*.pdf")
@@ -230,7 +332,7 @@ caminos = glob.glob(f"{path}/*.pdf")
 
 # Esta lista contiene el camino hacia cada uno de los PDFs de los cuales se desean extraer los datos.
 
-# In[15]:
+# In[119]:
 
 
 archivos = [ os.path.split(camino)[1] for camino in caminos]
@@ -239,7 +341,7 @@ archivos
 
 # Nombre de los archivos PDF, sin el camino absoluto dentro del *filesystem*.
 
-# In[16]:
+# In[120]:
 
 
 nombres = [ archivo.replace('.pdf', '') for archivo in archivos ]
@@ -248,7 +350,7 @@ nombres
 
 # Nombre de los archivos, sin la extensión ```.pdf```.
 
-# In[ ]:
+# In[121]:
 
 
 ahora_si = { 
@@ -257,149 +359,144 @@ ahora_si = {
 }
 
 
-# In[14]:
+# In[122]:
 
 
 [ ahora_si[key].sort() for key in ahora_si.keys() ]
 #ahora_si
 
 
-# In[15]:
+# In[123]:
 
 
-Pats = True
+parse_from_txt = True
 
-if Pats:
+if parse_from_txt:
+    # Buscamos todos los archivos de texto :
+    #   los nombres de archivo especificados por 'nombres'
+    #   en el directorio especificado por 'path_textos'
+    archivos_de_texto = { 
+        archivo: glob.glob(os.path.join(path_textos ,f"{nombre}.?.txt")) 
+        for archivo, nombre in zip(archivos, nombres)
+    }
+    # Los ordenamos, para que el orden de las páginas sea el mismo 
+    # que en los PDFs :
+    [ archivos_de_texto[key].sort() for key in archivos_de_texto.keys() ]
+    
+    # Creamos un diccionario vacío el cual contendrá todas las cadenas 
+    # de acaracteres asociadas a cada una de las hojas de cada uno de los reportes
+    # de análisis clínicos.
     strings = {}
-    for key in ahora_si.keys():
+    
+    # Iteramos sobre cada uno de los nombres de archivo pdf
+    for key in archivos_de_texto.keys():
+        # Generamos una lista vacía para contener las 'n'
+        # cadenas de caracteres, correspondientes a las 'n'
+        # páginas de cada pdf.
         _strings = []
-        for _file in ahora_si[key]:
+        for _file in archivos_de_texto[key]:
+            # Iteramos sobre cada 'hoja' perteneciente al pdf especificado.
             with open(_file, 'r') as f:
               _strings.append(f.read())
         strings.update({
+            # Añadimos el archivo como llave y 
+            # la lista de strings como valor al diccionario.
             key: _strings
         })
 
 
-# In[16]:
+# In[ ]:
 
 
-Gus = True
-
-if Gus:
-    strings2 = {}
-    for key in ahora_si.keys():
-        _strings = []
-        for _file in ahora_si[key]:
-            with open(_file, 'r') as f:
-              _strings.append(f.read())
-        strings2.update({
-            key: _strings
-        })
 
 
-# In[34]:
+
+# In[124]:
 
 
 # Obtain text from the PDFs, directly (this takes about a minute) : 
-from_scratch = False
+from_pdfs = False
 
-if from_scratch:
+if from_pdfs:
+    # Para acelerar el proceso, generamos imágenes de forma paralela
+    # gracias a pool.map :
     imagenes = pool.map(convert_from_path, caminos)
+    # Construimos un diccionario con los nombres de archivos y las
+    # imágenes obtenidas : 
     archivos_en_imagenes = {
         archivo: imagen for archivo, imagen in zip(archivos, imagenes)
     }
+    # Generamos un nuevo diccionario, ahora con cadenas de caracteres
+    # en lugar de imágenes, estas primeras obtenidas a través de 
+    # pytesseract.
+    # la función images_to_strings() utiliza a su vez pool.map, para
+    # acelerar el proceso de extracción de caracteres.
     strings = images_to_strings(archivos_en_imagenes)
 
 
-# In[13]:
+# In[125]:
 
 
-# Send all of these files to texts/
-save = False
+# Guardamos cada uno de los strings generados, 
+# para poder posteriormente acceder a ellos sin necesidad de 
+# repetir el procesamiento de imágenes, lo que conforme 
+# crezca la base de datos del PDF, se hará más lento.
+save = True
 
 if save:
     for nombre, hojas in strings.items():
         for i, hoja in enumerate(hojas):
-            _file_name = os.path.join(path_textos, f"{nombre.replace('.pdf', '')}.{i}.txt")
+            _file_name = os.path.join(path_textos, f"{nombre.replace('.pdf', '')}.{i+1}.txt")
             with open(_file_name, "w") as f:
                 f.write(hoja)
 
 
-# In[22]:
+# In[126]:
 
 
-for lista in strings.values():
-    for string in lista:
-        print(regex.findall(r"\d{2}/\d{2}/\d{4}", string))
+extract_dates(strings, exclude_date='06/08/1996')
 
 
-# In[23]:
+# Esta función que creamos ```extract_date()``` permite obtener fechas encontradas en un PDF, con flexibilidad en cuanto a formatos y la posibilidad de excluir una fecha especificada, que bien podría ser la fecha de cumpleaños del paciente.
 
-
-dates = {}
-for nombre, lista in strings.items():
-    _tmp_list = []
-    for string in lista:
-        _tmp_val = set(regex.findall(r"(\d{2}\D[A-Z]{3}\D\d{4}|\d{2}\D\d{2}\D\d{4})", string))
-        if len(_tmp_list) == 0:
-            _tmp_list.append(_tmp_val)
-        else:
-            if _tmp_val not in _tmp_list:
-                _tmp_list.append(_tmp_val)
-    dates.update({
-        nombre: _tmp_list
-    })
-pprint.pprint(dates)
-
-
-# In[26]:
-
-
-dates = {}
-for nombre, lista in strings.items():
-    _tmp_list = []
-    for string in lista:
-        _tmp_list += list(set(
-            regex.findall(r"(\d{2}\D[A-Z]{3}\D\d{4}|\d{2}\D\d{2}\D\d{4})", string)
-        ))
-    dates.update({
-        nombre: list(set(_tmp_list))
-    })
-
-for nombre, lista in dates.items():
-    dates[nombre] = lfilter(lambda x: x if x != someval else False, lista)
-    
-
-pprint.pprint(dates)
-
-
-# In[37]:
+# In[127]:
 
 
 print(tab_by_regex(strings[archivos[1]][0]))
 
 
-# In[74]:
+# Aquí observamos cómo la función que definimos ```tab_by_regex()``` puede identficar correctamente los parámetros de interés, aunque incluye datos que pueden no ser los deseados ya que el reconocimiento de caracteres de **pytesseract** no es perfecto.
+# 
+# Esto se deberá tomar en cuenta el momento de generar los registros.
+
+# In[128]:
 
 
-lol = dict_from_regex(strings['gustavo_maganna_2018-01-19.pdf'][0])
-lol
+ejemplo = dict_from_regex(strings['gustavo_maganna_2018-01-19.pdf'][0])
+print(build_string(ejemplo))
 
 
-# In[67]:
+# In[129]:
+
+
+save_to_jsonl(strings)
+
+
+# 
+
+# In[130]:
 
 
 guarda(strings)
 
 
-# In[52]:
+# In[131]:
 
 
 nombres
 
 
-# In[15]:
+# In[95]:
 
 
 _file = archivos[1]
@@ -408,7 +505,7 @@ print(len(strings[_file]))
 print(strings[_file][2])
 
 
-# In[17]:
+# In[97]:
 
 
 foo = strings[_file][2]
@@ -431,31 +528,31 @@ for line in foo_lines:
 """
 
 
-# In[29]:
+# In[98]:
 
 
 #print(foo)
 
 
-# In[27]:
+# In[99]:
 
 
 #print(tab_by_regex(strings[archivos[2]][0]))
 
 
-# In[30]:
+# In[100]:
 
 
 nombres
 
 
-# In[28]:
+# In[101]:
 
 
 archivos
 
 
-# In[29]:
+# In[102]:
 
 
 camino_resultados = os.path.abspath('segmented')
@@ -468,13 +565,13 @@ camino_resultados
 save_results(strings)
 
 
-# In[38]:
+# In[103]:
 
 
 os.mkdir('hue')
 
 
-# In[34]:
+# In[104]:
 
 
 for i, archivo in enumerate(archivos):
@@ -483,14 +580,14 @@ for i, archivo in enumerate(archivos):
             f.write(tab_by_regex(page))
 
 
-# In[19]:
+# In[105]:
 
 
 newline = lambda x: f"{x}\n"
 ntab = lambda n, txt: n*"\t" + txt
 
 
-# In[ ]:
+# In[106]:
 
 
 for archivo in archivos:
@@ -550,14 +647,14 @@ my_better_extract_units_between_numbers = r"(?<=(\d+\.\d+|\d+))\D[^\.\d]+?(?=(\d
 my_extract_units_between_numbers_and_whitespace = r"(?<=(\d+\.\d+|\d+))\D[^\.\d]+?(?=\s)"
 
 
-# In[34]:
+# In[92]:
 
 
 dir(regex)
 help(regex.purge)
 
 
-# In[35]:
+# In[93]:
 
 
 for line in foo_lines:
