@@ -48,7 +48,7 @@ import timing
 pool = mp.Pool()
 
 
-# In[99]:
+# In[102]:
 
 
 @timing.time_log()
@@ -287,17 +287,12 @@ def save_docs_to_jsonl(x: Dict[str, List[str]], filename: Optional[str] = None) 
         for archivo in archivos:
             _dates[archivo] = _dates[archivo] if _dates[archivo] else [archivo.replace('.pdf', '')]
         
-        print(1)
         if filename is None:
             filename = 'resultados.jl'
                
-        print(2)
         with open(filename, 'a') as f:
-            print('dentro de open')
-            for archivo in _archivos:
-                print('dentro del primer loop')    
+            for archivo in _archivos:    
                 for hoja in x[archivo]:
-                    print('dentro del segundo loop')
                     f.write(f"{json.dumps(dict_from_regex2(hoja, *_dates[archivo]))}\n")
         return True
     except Exception as e:
@@ -532,7 +527,7 @@ if example2:
 
 # Este ejemplo permite contrastar el texto identificado por **pytesseract** y los valores obtenidos una vez que se ha aplicado nuestro sistema de filtro para encontrar los parámetros de interés.
 
-# In[101]:
+# In[103]:
 
 
 save_docs_to_jsonl(strings)
