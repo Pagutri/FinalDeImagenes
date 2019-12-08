@@ -280,15 +280,10 @@ def build_string_from_dict(x: Union[Dict[str, List[str]], List[Dict[str, Any]]])
 ##
 
 
-# In[5]:
+# In[43]:
 
 
-type({}) is dict
-
-
-# In[6]:
-
-
+# Funciones de asistencia "helper functions" :
 newline = lambda x: f"{x}\n"
 ntab = lambda n, txt: n*"\t" + txt
 
@@ -350,22 +345,6 @@ nombres
 
 # Nombre de los archivos, sin la extensión ```.pdf```.
 
-# In[15]:
-
-
-ahora_si = { 
-    archivo: glob.glob(os.path.join(path_textos ,f"{nombre}.?.txt")) 
-    for archivo, nombre in zip(archivos, nombres)
-}
-
-
-# In[16]:
-
-
-[ ahora_si[key].sort() for key in ahora_si.keys() ]
-#ahora_si
-
-
 # In[17]:
 
 
@@ -403,12 +382,6 @@ if parse_from_txt:
             # la lista de strings como valor al diccionario.
             key: _strings
         })
-
-
-# In[ ]:
-
-
-
 
 
 # In[18]:
@@ -482,6 +455,8 @@ print(build_string_from_dict(ejemplo))
 save_to_jsonl(strings)
 
 
+# Aquí hemos guardado los registros en un archivo JSON-Lines
+
 # In[24]:
 
 
@@ -500,38 +475,13 @@ print("Parámetros encontrados : \n",build_string_from_dict(dict_from_regex(stri
 save_results(strings)
 
 
-# In[ ]:
-
-
-
-
-
-# In[27]:
-
-
-newline = lambda x: f"{x}\n"
-ntab = lambda n, txt: n*"\t" + txt
-
-
-# In[28]:
+# In[44]:
 
 
 for archivo in archivos:
     for hoja in strings[archivo]:
-        #print(build_string_from_dict(dict_from_regex(hoja)))
-        print(tab_by_regex(hoja))
-
-
-# In[ ]:
-
-
-
-
-
-# In[30]:
-
-
-print(_my_str)
+        print(build_string_from_dict(dict_from_regex(hoja)))
+        #print(tab_by_regex(hoja))
 
 
 # In[31]:
