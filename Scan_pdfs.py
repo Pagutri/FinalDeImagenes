@@ -48,7 +48,7 @@ import timing
 pool = mp.Pool()
 
 
-# In[4]:
+# In[86]:
 
 
 @timing.time_log()
@@ -102,7 +102,8 @@ def tab_by_regex(x: str) -> str:
 @timing.time_log()
 def dict_from_regex(x: str) -> str:
     """
-        Genera un directorio con los valores deseado
+        Genera un diccionario listo para ser serializado a JSON-Lines.
+        
     """
     
     _x_lines: List[str] = x.split('\n')
@@ -126,8 +127,55 @@ def dict_from_regex(x: str) -> str:
                         "units": _unidades
                     }
                 })
+                
+            # We purge _dict2, allowing just matches having more than
+            # one value, as is makes no sense to log void entries.
+            _dict2 = {
+                key: value for key, value in _dict2.items() if len(value['values']) > 0
+            }
     
     return _dict2
+##
+
+@timing.time_log()
+def dict_from_regex2(x: str, date: Optional[str] = None) -> str:
+    """
+        Genera un diccionario listo para ser serializado a JSON-Lines.
+        
+    """
+
+    _x_lines: List[str] = x.split('\n')
+    
+    _dict2 = {}
+    for line in _x_lines:
+        for i in regex.finditer(r"^([A-Z\s|[A-Z]\.?)+?(?=(\..+))", line): 
+            i.group()
+            _valores = []
+            _unidades = []
+            # Match numbers, which could be either integers or floats : 
+            for j in regex.finditer(r"(\d+\.\d+|\d+)", i.string):
+                _valores.append(float(j.group()))
+            # Match strings found between numbers :
+            for k in regex.finditer(r"(?<=(\d+\.\d+|\d+))\D[^\d]+?(?=\s)", i.string):
+                _unidades.append(k.group())
+            if len(_valores) < 5 and len(_unidades) < 5:
+                _dict2.update({
+                    i.group(): {
+                        "values": _valores,
+                        "units": _unidades
+                    }
+                })
+                
+            # We purge _dict2, allowing just matches having more than
+            # one value, as is makes no sense to log void entries.
+            _dict2 = {
+                key: value for key, value in _dict2.items() if len(value['values']) > 0
+            }
+    
+    if date is not None:
+        return { date: _dict2 }
+    else:
+        return _dict2
 ##
 
 @timing.time_log()
@@ -203,7 +251,7 @@ def extract_dates(
 ##
                                        
 @timing.time_log()
-def save_to_jsonl(x: Dict[str, List[str]], filename: Optional[str] = None) -> bool:
+def save_docs_to_jsonl(x: Dict[str, List[str]], filename: Optional[str] = None) -> bool:
     """
         Guarda los resultados en un archivo, cuyo nombre puede 
         ser opcionalmente especificado a través del parámetro 'filename'.
@@ -235,13 +283,14 @@ def save_to_jsonl(x: Dict[str, List[str]], filename: Optional[str] = None) -> bo
     
     try:
         _archivos = x.keys()
+        _dates =  extract_dates(x)
         if filename is None:
             filename = 'resultados.jl'
                                        
         with open(filename, 'a') as f:
             for archivo in _archivos:
                 for hoja in x[archivo]:
-                    f.write(f"{json.dumps(dict_from_regex(hoja))}\n")
+                    f.write(f"{json.dumps(dict_from_regex2(hoja, _dates[archivo]))}\n")
         return True
     except:
         return False
@@ -280,7 +329,7 @@ def build_string_from_dict(x: Union[Dict[str, List[str]], List[Dict[str, Any]]])
 ##
 
 
-# In[43]:
+# In[49]:
 
 
 # Funciones de asistencia "helper functions" :
@@ -288,7 +337,7 @@ newline = lambda x: f"{x}\n"
 ntab = lambda n, txt: n*"\t" + txt
 
 
-# In[7]:
+# In[50]:
 
 
 path = os.path.abspath('analisis_clinicos/')
@@ -297,7 +346,7 @@ path
 
 # Aquí se encuentran todos los pdf con análisis clínicos que tenemos.
 
-# In[8]:
+# In[51]:
 
 
 path_textos = os.path.abspath('textos')
@@ -306,7 +355,7 @@ path_textos
 
 # En esta dirección guardaremos todos los textos reconocidos por **pytesseract**.
 
-# In[9]:
+# In[52]:
 
 
 caminos_textos = glob.glob(f"{path_textos}/*.txt")
@@ -318,7 +367,7 @@ caminos_textos.sort()
 # 
 # ```mi_archivo.pdf```  => ```mi_archivo.i.txt``` Donde **i** indica el número de página.
 
-# In[10]:
+# In[53]:
 
 
 caminos = glob.glob(f"{path}/*.pdf")
@@ -327,7 +376,7 @@ caminos = glob.glob(f"{path}/*.pdf")
 
 # Esta lista contiene el camino hacia cada uno de los PDFs de los cuales se desean extraer los datos.
 
-# In[11]:
+# In[54]:
 
 
 archivos = [ os.path.split(camino)[1] for camino in caminos]
@@ -336,7 +385,7 @@ archivos
 
 # Nombre de los archivos PDF, sin el camino absoluto dentro del *filesystem*.
 
-# In[12]:
+# In[55]:
 
 
 nombres = [ archivo.replace('.pdf', '') for archivo in archivos ]
@@ -345,7 +394,7 @@ nombres
 
 # Nombre de los archivos, sin la extensión ```.pdf```.
 
-# In[17]:
+# In[56]:
 
 
 parse_from_txt = True
@@ -384,7 +433,7 @@ if parse_from_txt:
         })
 
 
-# In[18]:
+# In[57]:
 
 
 # Obtain text from the PDFs, directly (this takes about a minute) : 
@@ -407,7 +456,7 @@ if from_pdfs:
     strings = images_to_strings(archivos_en_imagenes)
 
 
-# In[19]:
+# In[58]:
 
 
 # Guardamos cada uno de los strings generados, 
@@ -424,7 +473,7 @@ if save:
                 f.write(hoja)
 
 
-# In[20]:
+# In[59]:
 
 
 extract_dates(strings, exclude_date='06/08/1996')
@@ -432,59 +481,77 @@ extract_dates(strings, exclude_date='06/08/1996')
 
 # Esta función que creamos ```extract_date()``` permite obtener fechas encontradas en un PDF, con flexibilidad en cuanto a formatos y la posibilidad de excluir una fecha especificada, que bien podría ser la fecha de cumpleaños del paciente.
 
-# In[21]:
+# In[78]:
 
 
-print(tab_by_regex(strings[archivos[1]][0]))
+example0 = False
+
+if example0:
+    print(tab_by_regex(strings[archivos[1]][0]))
 
 
 # Aquí observamos cómo la función que definimos ```tab_by_regex()``` puede identficar correctamente los parámetros de interés, aunque incluye datos que pueden no ser los deseados ya que el reconocimiento de caracteres de **pytesseract** no es perfecto.
 # 
 # Esto se deberá tomar en cuenta el momento de generar los registros.
 
-# In[22]:
+# In[83]:
 
 
-ejemplo = dict_from_regex(strings['gustavo_maganna_2018-01-19.pdf'][0])
-print(build_string_from_dict(ejemplo))
+example1 = True
+
+if example1:
+    ejemplo = dict_from_regex(strings['gustavo_maganna_2018-01-19.pdf'][0])
+    print(build_string_from_dict(ejemplo))
 
 
-# In[23]:
+# Aquí pueden observarse los datos identificados de la primer hoja del pdf : 'gustavo_maganna_2018-01-19.pdf'
+
+# In[82]:
 
 
-save_to_jsonl(strings)
+example2 = False
+
+if example2:
+    _file = archivos[1]
+    print(f" Nombre del archivo: {_file}")
+    print(f" Número de hojas: {len(strings[_file])}")
+    _pagenum = 2
+    print(f" Contenido de la hoja {_pagenum + 1}: \n\n {strings[_file][_pagenum]}")
+    print("\n\n######################################################################\n\n")
+    print("Parámetros encontrados : \n",build_string_from_dict(dict_from_regex(strings[_file][_pagenum]) ))
+
+
+# Este ejemplo permite contrastar el texto identificado por **pytesseract** y los valores obtenidos una vez que se ha aplicado nuestro sistema de filtro para encontrar los parámetros de interés.
+
+# In[71]:
+
+
+save_docs_to_jsonl(strings)
 
 
 # Aquí hemos guardado los registros en un archivo JSON-Lines
 
-# In[24]:
-
-
-_file = archivos[1]
-print(f" Nombre del archivo: {_file}")
-print(f" Número de hojas: {len(strings[_file])}")
-_pagenum = 2
-print(f" Contenido de la hoja {_pagenum + 1}: \n\n {strings[_file][_pagenum]}")
-print("\n\n######################################################################\n\n")
-print("Parámetros encontrados : \n",build_string_from_dict(dict_from_regex(strings[_file][_pagenum]) ))
-
-
-# In[25]:
+# In[72]:
 
 
 save_results(strings)
 
 
-# In[44]:
+# Aquí hemos guardado el texto extraido de las imágenes.
+
+# In[77]:
 
 
-for archivo in archivos:
-    for hoja in strings[archivo]:
-        print(build_string_from_dict(dict_from_regex(hoja)))
-        #print(tab_by_regex(hoja))
+example3 = False
+
+if example3:
+    for archivo in archivos:
+        for hoja in strings[archivo]:
+            print(build_string_from_dict(dict_from_regex(hoja)))
+            #print(tab_by_regex(hoja))
 
 
-# In[31]:
+# In[66]:
 
 
 # My regexps :
@@ -501,7 +568,9 @@ my_better_extract_units_between_numbers = r"(?<=(\d+\.\d+|\d+))\D[^\.\d]+?(?=(\d
 my_extract_units_between_numbers_and_whitespace = r"(?<=(\d+\.\d+|\d+))\D[^\.\d]+?(?=\s)"
 
 
-# In[34]:
+# En esta celda podemos encontrar las expresiones regulares que fueron utilizadas en el proceso de exploración para así identificar las óptimas para poder extraer los datos de las hojas.
+
+# In[67]:
 
 
 # Cuántas líneas tenemos en total :
@@ -515,7 +584,7 @@ caracteres_por_linea = pd.core.series.Series(
 )
 
 
-# In[41]:
+# In[68]:
 
 
 sns.distplot(caracteres_por_linea, kde=False)
