@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[71]:
+# In[1]:
 
 
 import os
@@ -33,7 +33,7 @@ import cv2 as cv
 import pytesseract
 
 
-# In[72]:
+# In[2]:
 
 
 import timing
@@ -41,14 +41,14 @@ importlib.reload(timing)
 import timing
 
 
-# In[73]:
+# In[3]:
 
 
 # Instantiate a multiprocess pool.
 pool = mp.Pool()
 
 
-# In[112]:
+# In[4]:
 
 
 @timing.time_log()
@@ -280,20 +280,20 @@ def build_string_from_dict(x: Union[Dict[str, List[str]], List[Dict[str, Any]]])
 ##
 
 
-# In[113]:
+# In[5]:
 
 
 type({}) is dict
 
 
-# In[114]:
+# In[6]:
 
 
 newline = lambda x: f"{x}\n"
 ntab = lambda n, txt: n*"\t" + txt
 
 
-# In[115]:
+# In[7]:
 
 
 path = os.path.abspath('analisis_clinicos/')
@@ -302,7 +302,7 @@ path
 
 # Aquí se encuentran todos los pdf con análisis clínicos que tenemos.
 
-# In[116]:
+# In[8]:
 
 
 path_textos = os.path.abspath('textos')
@@ -311,7 +311,7 @@ path_textos
 
 # En esta dirección guardaremos todos los textos reconocidos por **pytesseract**.
 
-# In[117]:
+# In[9]:
 
 
 caminos_textos = glob.glob(f"{path_textos}/*.txt")
@@ -323,7 +323,7 @@ caminos_textos.sort()
 # 
 # ```mi_archivo.pdf```  => ```mi_archivo.i.txt``` Donde **i** indica el número de página.
 
-# In[118]:
+# In[10]:
 
 
 caminos = glob.glob(f"{path}/*.pdf")
@@ -332,7 +332,7 @@ caminos = glob.glob(f"{path}/*.pdf")
 
 # Esta lista contiene el camino hacia cada uno de los PDFs de los cuales se desean extraer los datos.
 
-# In[119]:
+# In[11]:
 
 
 archivos = [ os.path.split(camino)[1] for camino in caminos]
@@ -341,7 +341,7 @@ archivos
 
 # Nombre de los archivos PDF, sin el camino absoluto dentro del *filesystem*.
 
-# In[120]:
+# In[12]:
 
 
 nombres = [ archivo.replace('.pdf', '') for archivo in archivos ]
@@ -350,7 +350,7 @@ nombres
 
 # Nombre de los archivos, sin la extensión ```.pdf```.
 
-# In[121]:
+# In[13]:
 
 
 ahora_si = { 
@@ -359,14 +359,14 @@ ahora_si = {
 }
 
 
-# In[122]:
+# In[14]:
 
 
 [ ahora_si[key].sort() for key in ahora_si.keys() ]
 #ahora_si
 
 
-# In[123]:
+# In[15]:
 
 
 parse_from_txt = True
@@ -411,7 +411,7 @@ if parse_from_txt:
 
 
 
-# In[124]:
+# In[16]:
 
 
 # Obtain text from the PDFs, directly (this takes about a minute) : 
@@ -434,7 +434,7 @@ if from_pdfs:
     strings = images_to_strings(archivos_en_imagenes)
 
 
-# In[125]:
+# In[17]:
 
 
 # Guardamos cada uno de los strings generados, 
@@ -451,7 +451,7 @@ if save:
                 f.write(hoja)
 
 
-# In[126]:
+# In[18]:
 
 
 extract_dates(strings, exclude_date='06/08/1996')
@@ -459,7 +459,7 @@ extract_dates(strings, exclude_date='06/08/1996')
 
 # Esta función que creamos ```extract_date()``` permite obtener fechas encontradas en un PDF, con flexibilidad en cuanto a formatos y la posibilidad de excluir una fecha especificada, que bien podría ser la fecha de cumpleaños del paciente.
 
-# In[127]:
+# In[19]:
 
 
 print(tab_by_regex(strings[archivos[1]][0]))
@@ -469,106 +469,35 @@ print(tab_by_regex(strings[archivos[1]][0]))
 # 
 # Esto se deberá tomar en cuenta el momento de generar los registros.
 
-# In[128]:
+# In[21]:
 
 
 ejemplo = dict_from_regex(strings['gustavo_maganna_2018-01-19.pdf'][0])
-print(build_string(ejemplo))
+print(build_string_from_dict(ejemplo))
 
 
-# In[129]:
+# In[22]:
 
 
 save_to_jsonl(strings)
 
 
-# 
-
-# In[130]:
-
-
-guarda(strings)
-
-
-# In[131]:
-
-
-nombres
-
-
-# In[95]:
+# In[31]:
 
 
 _file = archivos[1]
-print(_file)
-print(len(strings[_file]))
-print(strings[_file][2])
+print(f" Nombre del archivo: {_file}")
+print(f" Número de hojas: {len(strings[_file])}")
+_pagenum = 2
+print(f" Contenido de la hoja {_pagenum + 1}: \n\n {strings[_file][_pagenum]}")
+print("\n\n######################################################################\n\n")
+print("Parámetros encontrados : \n",build_string_from_dict(dict_from_regex(strings[_file][_pagenum]) ))
 
 
-# In[97]:
-
-
-foo = strings[_file][2]
-
-# Split by line breaks :
-foo_lines = foo.split("\n")
-
-# Select valid lines (i.e. longer than 5 characters) :
-foo_lines = [ line for line in foo_lines ] # if len(line) > 1 ]
-
-#regex.compile(r'[A-Z]')
-print(foo_lines[10])
-print(foo_lines[14])
-"""
-for line in foo_lines:
-    for i in regex.finditer(r"[0a-z]{2,}", line):
-        print(foo_lines[14])
-        #print(i.string)
-        #print('\t', i.group())
-"""
-
-
-# In[98]:
-
-
-#print(foo)
-
-
-# In[99]:
-
-
-#print(tab_by_regex(strings[archivos[2]][0]))
-
-
-# In[100]:
-
-
-nombres
-
-
-# In[101]:
-
-
-archivos
-
-
-# In[102]:
-
-
-camino_resultados = os.path.abspath('segmented')
-camino_resultados
-
-
-# In[48]:
+# In[35]:
 
 
 save_results(strings)
-
-
-# In[103]:
-
-
-os.mkdir('hue')
 
 
 # In[104]:
@@ -587,15 +516,16 @@ newline = lambda x: f"{x}\n"
 ntab = lambda n, txt: n*"\t" + txt
 
 
-# In[106]:
+# In[43]:
 
 
 for archivo in archivos:
     for hoja in strings[archivo]:
-        print(dict_from_regex(hoja))
+        #print(build_string_from_dict(dict_from_regex(hoja)))
+        print(tab_by_regex(hoja))
 
 
-# In[27]:
+# In[44]:
 
 
 _my_str = ''
@@ -609,7 +539,7 @@ for line in foo_lines:
             _my_str += newline(ntab(3, k.group()))
 
 
-# In[28]:
+# In[45]:
 
 
 print(_my_str)
@@ -654,12 +584,10 @@ dir(regex)
 help(regex.purge)
 
 
-# In[93]:
+# In[ ]:
 
 
-for line in foo_lines:
-    for i in regex.findall(r"^[A-Z]{2,}", line):
-        print(i)
+
 
 
 # In[101]:
